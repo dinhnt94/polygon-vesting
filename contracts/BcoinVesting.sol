@@ -351,13 +351,13 @@ abstract contract BcoinVesting is Ownable {
         require(isOwner() || (_msgSender() == _beneficiary), "must-be-onwer-or-beneficiary");
         uint256 monthsVestable;
         uint256 tokenVestable;
-        (monthsVestable, tokenVestable) = calculateClaimable(_msgSender());
+        (monthsVestable, tokenVestable) = calculateClaimable(_beneficiary);
         require(tokenVestable > 0, "nothing-to-be-vested");
     
         require(bcoinToken.transfer(msg.sender, tokenVestable), "fail-to-transfer-token");
     
         // update data in blockchain storage
-        Beneficiary storage bf = beneficiaries[_msgSender()];
+        Beneficiary storage bf = beneficiaries[_beneficiary];
         bf.monthsClaimed = bf.monthsClaimed.add(monthsVestable);
         bf.totalClaimed = bf.totalClaimed.add(tokenVestable);
         
