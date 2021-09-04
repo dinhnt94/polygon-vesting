@@ -26,10 +26,10 @@ Let's call Wallet_A the owner of the project (he is also the deployer.)
 
 9 - call PrivateSaleBcoinVesting.getBeneficiary(Wallet_B) to check his data.
 
-10 - using Wallet_A or Wallet_B, call PrivateSaleBcoinVesting.claimVestedToken(Wallet_B) to claim Token for Wallet_B. The contract will throw error if nothing to be claimed.
+10 - using Wallet_A or Wallet_B, call PrivateSaleBcoinVesting.claimVestedToken(Wallet_B) to claim Token for Wallet_B. The contract will throw error if nothing to be claimed. For security, the contract should also throw error if the caller is not Wallet_A (onwer) or Wallet_B (the beneficiary hiself).
 
-11 - If claim successfully (because we adjust startAtTimeStamp to time in the past.) Call PrivateSaleBcoinVesting.getBeneficiary(Wallet_B) to check data of Wallet_B. 
+11 - If claimed successfully (because we adjust startAtTimeStamp to time in the past,) Call PrivateSaleBcoinVesting.getBeneficiary(Wallet_B) to check data of Wallet_B. 
 
-12 - Additionary, during the whole process, call Token.BalanceOf(address), where address can be Wallet_A, Wallet_B or privateSaleBcoinVesting to track whether the fund is moved correctly.
+12 - Additionary, during the whole process, call Token.BalanceOf(address), where address can be Wallet_A, Wallet_B or privateSaleBcoinVesting on each step to track whether the fund is moved correctly.
 
 ---
