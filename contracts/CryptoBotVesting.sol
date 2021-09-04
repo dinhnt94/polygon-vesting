@@ -288,7 +288,7 @@ abstract contract BcoinVesting is Ownable {
     // Beneficiary contains details of each beneficiary/investor
     struct Beneficiary {
         uint256 initialBalance;
-        uint16 monthsClaimed;
+        uint256 monthsClaimed;
         uint256 totalClaimed;
     }
     
@@ -348,19 +348,31 @@ abstract contract BcoinVesting is Ownable {
     // Only the owner or the beneficiary can call this function
     // @param _beneficiary Address of the beneficiary 
     function claimVestedToken(address _beneficiary) public {
-        require(isOwner() || (msg.sender == _beneficiary), "must-be-onwer-or-beneficiary");
+        require(isOwner() || (_msgSender() == _beneficiary), "must-be-onwer-or-beneficiary");
         uint256 monthsVestable;
         uint256 tokenVestable;
+        (monthsVestable, tokenVestable) = calculateClaimable(_msgSender());
+        require(tokenVestable > 0, "nothing-to-be-vested");
+    
+        require(bcoinToken.transfer(msg.sender, tokenVestable), "fail-to-transfer-token");
+    
+        // update data in blockchain storage
+        Beneficiary storage bf = beneficiaries[_msgSender()];
+        bf.monthsClaimed = bf.monthsClaimed.add(monthsVestable);
+        bf.totalClaimed = bf.totalClaimed.add(tokenVestable);
         
+        emit Claim(_msgSender(), tokenVestable, block.timestamp);
         
     }
     
-    // the withrawable token each month is rounded if it is a decimal number
+    // calculateWithrawable calculates the claimable token of the beneficiary
+    // claimable token each month is rounded if it is a decimal number
     // So the rest of the token will be claimed on the last month (the duration is over)
     // @param _beneficiary Address of the beneficiary 
-    function calculateWithrawable(
-                address _beneficiary
-                ) internal view returns (uint256 , uint256) {
+    function calculateClaimable(address _beneficiary
+                ) private
+                view
+                returns (uint256 , uint256) {
                     
         uint256 _now = block.timestamp;
         if (_now < vestingStartAt) {
@@ -387,9 +399,25 @@ abstract contract BcoinVesting is Ownable {
           uint256 tokenVestable = monthsVestable.mul(tokenVestedPerMonth);
           return (monthsVestable, tokenVestable);
         }
-  }
-
+    }
     
+    
+    // view function to check status of a beneficiary
+    function getBeneficiary(address _beneficiary) 
+        public 
+        view 
+        returns (
+        uint256 initialBalance,
+        uint256 monthsClaimed,
+        uint256 totalClaimed) {
+            
+        Beneficiary storage bf = beneficiaries[_beneficiary];
+        require(bf.initialBalance > 0, "beneficiary-not-found");
+        
+        return(bf.initialBalance,
+               bf.monthsClaimed,
+               bf.totalClaimed);
+        }
     
     
 }
