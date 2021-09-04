@@ -8,7 +8,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.1
 contract BOMBC is ERC20 {
     address public owner;
     
-    constructor() payable ERC20("BOMBC Token", "BOMBC") {
+    constructor() payable ERC20("BCOIN Token", "BCOIN") {
         owner = msg.sender;
     }
 
