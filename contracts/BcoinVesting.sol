@@ -361,7 +361,7 @@ abstract contract BcoinVesting is Ownable {
         bf.monthsClaimed = bf.monthsClaimed.add(monthsVestable);
         bf.totalClaimed = bf.totalClaimed.add(tokenVestable);
         
-        emit Claim(_msgSender(), tokenVestable, block.timestamp);
+        emit Claim(_beneficiary, tokenVestable, block.timestamp);
         
     }
     
