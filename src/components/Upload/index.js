@@ -31,10 +31,11 @@ const UploadCom = () => {
   };
   return (
     <div>
-      <label htmlFor="upload-csv" style={{ display: "block" }}>
-        Chọn file CSV
+      <label htmlFor="upload-csv" style={{ display: "flex", alignItems: "center", }}>
+        <img width="50" src="https://cdn.pixabay.com/photo/2017/02/07/02/16/cloud-2044823_960_720.png" alt="" />
+        <h4 style={{marginLeft: 10}}>Upload CSV to show list address</h4>
       </label>
-      <input type="file" id="upload-csv" onChange={onChange} />
+      <input style={{ display: "none" }} type="file" id="upload-csv" onChange={onChange} />
     </div>
   );
 };
