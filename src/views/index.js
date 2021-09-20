@@ -2,24 +2,23 @@ import { Button, Row, Col, Input, Form, InputNumber } from "antd";
 import Upload from "../components/Upload/index";
 import { useState } from "react";
 import Table from "../components/Table";
-import { useContract } from "../hooks/contract";
-import { addDocAddres } from "../untils/filrebase";
+import { useAddress } from "../hooks/address";
 
 const formItemLayout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 14 },
+  wrapperCol: { span: 16 },
   labelAlign: "left"
 };
 
 const App = () => {
   const [columns, setColumns] = useState([]);
-  const { addBeneficiary } = useContract();
+  const { addDoc } = useAddress();
   const [form] = Form.useForm();
 
   const onFinish = async (value) => {
     if (value.address && value.amount) {
-      await addBeneficiary(value.address, value.amount);
-      await addDocAddres({ address: value.address, amount: value.amount, status: "completed" });
+      value.status = "draft";
+      await addDoc(value);
       form.resetFields();
     } else {
       alert("Enter address and amount");
@@ -29,17 +28,17 @@ const App = () => {
   return (
     <div className="container">
       <Row gutter={[20, 20]} style={{ marginTop: 100 }}>
-        <Col span="12">
+        <Col span="20">
           <Form {...formItemLayout} form={form} onFinish={onFinish}>
             <Form.Item label="Address wallet" name="address">
               <Input placeholder="Address wallet" />
             </Form.Item>
             <Form.Item label="Amount" name="amount">
-              <InputNumber style={{ width: "100%" }} placeholder="Address wallet" />
+              <InputNumber style={{ width: "100%" }} placeholder="Amount transfer" />
             </Form.Item>
 
             <Button type="primary" htmlType="submit">
-              Add Beneficiary
+              Add to list address
             </Button>
           </Form>
         </Col>

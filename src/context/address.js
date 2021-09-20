@@ -29,10 +29,18 @@ function Contract({ children }) {
     setList(temp);
   };
 
+  const addDoc = async (record) => {
+    const temp = [...list];
+    temp.unshift(record);
+    addDocAddres(record);
+    setList(temp);
+  };
+
   const value = {
     list,
     fetchDocAddress,
-    updateStatus
+    updateStatus,
+    addDoc
   };
   return (
     <addressContext.Provider value={value}>
