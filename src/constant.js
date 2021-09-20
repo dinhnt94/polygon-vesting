@@ -1,8 +1,8 @@
 export const URL_NET = "https://data-seed-prebsc-1-s1.binance.org:8545/";
-export const TOKEN_PRIVATE_BCOIN = "0xDac5183c895bf80b371045b9B6Ed5FD73F0F4188";
+export const TOKEN_PRIVATE_BCOIN = "0x369b11CB5c96be857d7CAC5b665Dc3Cd100402EA";
 export const ChainID = 97;
 export const BCOIN = {
-  address: "0xC6d8889aC0F7Bb6260c8898a2D0139Ef51186f59",
+  address: "0x0299C93D30e9D229A2764241A15D0C45715c5B46",
   abi: [
     {
       inputs: [],
@@ -313,7 +313,7 @@ export const BCOIN = {
   ]
 };
 export const PRIVATED_SALE = {
-  address: "0xDac5183c895bf80b371045b9B6Ed5FD73F0F4188",
+  address: "0x369b11CB5c96be857d7CAC5b665Dc3Cd100402EA",
   abi: [
     {
       anonymous: false,

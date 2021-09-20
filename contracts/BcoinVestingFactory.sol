@@ -87,7 +87,7 @@ contract ReserveBCoinVesting is BCoinVesting {
 contract BCoinVestingFactory {
   // put the token address here
   // This should be included in the contract for transparency
-  address public BCOIN_TOKEN_ADDRESS = 0x648a9CF8E95c73110D28E7e2329b2D0910Bd36B8;
+  address public BCOIN_TOKEN_ADDRESS = 0x0299C93D30e9D229A2764241A15D0C45715c5B46;
 
   // put the startAtTimeStamp here
   // To test all contracts, change this timestamp to time in the past.
