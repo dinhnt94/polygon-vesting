@@ -38,21 +38,6 @@ function Contract({ children }) {
     web3Ref.current = web3;
   };
 
-  // const addBeneficiary = async (address, amount) => {
-  //   const BToken = constractBcoin.current;
-  //   const PToken = PrivateSaleCT.current;
-  //   setLoading(true);
-  //   try {
-  //     await BToken.methods.approve(PRIVATESALEBCOINVESTING.address, amount).send({ from: account.current });
-  //     await PToken.methods.addBeneficiary(address, amount).send({ from: account.current });
-  //   } catch (error) {
-  //     console.log(error);
-  //     return false;
-  //   }
-  //   setLoading(false);
-  //   return true;
-  // };
-
   const approve = async (amount) => {
     const BToken = constractBcoin.current;
     const price = (amount * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
