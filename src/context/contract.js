@@ -1,24 +1,34 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { BCOIN, TOKEN_PRIVATE_BCOIN, PRIVATED_SALE } from "../constant";
 import Web3 from "web3";
+import { Result } from "antd";
 
 export const contextWeb3 = createContext("Default Value");
 
 function Contract({ children }) {
   const [loading, setLoading] = useState(false);
+  const [connect, setConnect] = useState("loading");
 
   const constractBcoin = useRef({});
   const PrivateSaleCT = useRef({});
   const web3Ref = useRef({});
-
   const account = useRef({});
-
   const enableEthereum = async () => {
-    if (window.ethereum) await window.ethereum.enable();
+    if (window.ethereum) {
+      await window.ethereum.enable();
+      setConnect("success");
+      return true;
+    } else {
+      setConnect("fail");
+      return false;
+    }
   };
 
   const connectBcoin = async () => {
-    enableEthereum();
+    const connected = await enableEthereum();
+
+    if (!connected) return;
+
     const web3 = await new Web3(window.ethereum);
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
     const BToken = await new web3.eth.Contract(BCOIN.abi, BCOIN.address);
@@ -31,7 +41,6 @@ function Contract({ children }) {
   const addBeneficiary = async (address, amount) => {
     const BToken = constractBcoin.current;
     const PToken = PrivateSaleCT.current;
-
     setLoading(true);
     try {
       await BToken.methods.approve(TOKEN_PRIVATE_BCOIN, amount).send({ from: account.current });
@@ -52,7 +61,8 @@ function Contract({ children }) {
 
   return (
     <contextWeb3.Provider value={value}>
-      {children}
+      {connect === "success" && children}
+      {connect === "fail" && <Result status="404" title="404" subTitle="Sorry, Not found Metamask Wallet." />}
       {loading && <div className="loading">Loading ...</div>}
     </contextWeb3.Provider>
   );
