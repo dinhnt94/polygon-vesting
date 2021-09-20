@@ -1,5 +1,6 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { BCOIN, TOKEN_PRIVATE_BCOIN, PRIVATED_SALE } from "../constant";
+import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../constant";
+import { BoxLoading } from "react-loadingg";
 import Web3 from "web3";
 import { Result } from "antd";
 
@@ -26,44 +27,93 @@ function Contract({ children }) {
 
   const connectBcoin = async () => {
     const connected = await enableEthereum();
-
     if (!connected) return;
 
     const web3 = await new Web3(window.ethereum);
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    const BToken = await new web3.eth.Contract(BCOIN.abi, BCOIN.address);
-    PrivateSaleCT.current = await new web3.eth.Contract(PRIVATED_SALE.abi, PRIVATED_SALE.address);
+    const BToken = await new web3.eth.Contract(BCOINTOKEN.abi, BCOINTOKEN.address, { from: accounts[0] });
+    PrivateSaleCT.current = await new web3.eth.Contract(PRIVATESALEBCOINVESTING.abi, PRIVATESALEBCOINVESTING.address, { from: accounts[0] });
     constractBcoin.current = BToken;
     account.current = accounts[0];
     web3Ref.current = web3;
   };
 
-  const addBeneficiary = async (address, amount) => {
+  // const addBeneficiary = async (address, amount) => {
+  //   const BToken = constractBcoin.current;
+  //   const PToken = PrivateSaleCT.current;
+  //   setLoading(true);
+  //   try {
+  //     await BToken.methods.approve(PRIVATESALEBCOINVESTING.address, amount).send({ from: account.current });
+  //     await PToken.methods.addBeneficiary(address, amount).send({ from: account.current });
+  //   } catch (error) {
+  //     console.log(error);
+  //     return false;
+  //   }
+  //   setLoading(false);
+  //   return true;
+  // };
+
+  const approve = async (amount) => {
     const BToken = constractBcoin.current;
+    const price = (amount * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
+    console.log(price);
+    setLoading(true);
+    try {
+      await BToken.methods.approve(PRIVATESALEBCOINVESTING.address, price).send({ from: account.current });
+      setLoading(false);
+      return true;
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const confirm = async ({ address, amount }) => {
+    const PToken = PrivateSaleCT.current;
+    const price = (amount * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
+    setLoading(true);
+    try {
+      await await PToken.methods.addBeneficiary(address, price).send({ from: account.current });
+      setLoading(false);
+      return true;
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const balanceOf = async (address) => {
     const PToken = PrivateSaleCT.current;
     setLoading(true);
     try {
-      await BToken.methods.approve(TOKEN_PRIVATE_BCOIN, amount).send({ from: account.current });
-      await PToken.methods.addBeneficiary(address, amount).send({ from: account.current });
+      const balance = await PToken.methods.beneficiaries(address).call();
+
+      setLoading(false);
+      return balance[0] / Math.pow(10, 18);
     } catch (error) {
       console.log(error);
-      return false;
+      setLoading(false);
+      return "null";
     }
-    setLoading(false);
-    return true;
   };
 
   useEffect(() => {
     connectBcoin();
   }, []);
 
-  const value = { BToken: constractBcoin.current, dress_account: account.current, addBeneficiary: addBeneficiary, setLoading: setLoading };
+  const value = { BToken: constractBcoin.current, dress_account: account.current, setLoading: setLoading, approve, confirm, balanceOf };
 
   return (
     <contextWeb3.Provider value={value}>
       {connect === "success" && children}
       {connect === "fail" && <Result status="404" title="404" subTitle="Sorry, Not found Metamask Wallet." />}
-      {loading && <div className="loading">Loading ...</div>}
+      {loading && (
+        <div className="loading">
+          <BoxLoading size="large" />;
+        </div>
+      )}
     </contextWeb3.Provider>
   );
 }

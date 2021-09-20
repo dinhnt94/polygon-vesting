@@ -1,5 +1,6 @@
 import { addDocAddres } from "../../untils/filrebase";
 import { useAddress } from "../../hooks/address";
+import { useContract } from "../../hooks/contract";
 const CSVToArray = (data, delimiter = ",", omitFirstRow = false) =>
   data
     .slice(omitFirstRow ? data.indexOf("\n") + 1 : 0)
@@ -11,17 +12,20 @@ const CSVToArray = (data, delimiter = ",", omitFirstRow = false) =>
 
 const UploadCom = () => {
   const { fetchDocAddress } = useAddress();
+  const { setLoading } = useContract();
   const onChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     var reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = async function (e) {
       const result = CSVToArray(reader.result);
-      console.log(result.length);
-      result.forEach(async (element) => {
+      setLoading(true);
+      for await (const element of result) {
         await addDocAddres(element);
-      });
-      fetchDocAddress();
+      }
+
+      await fetchDocAddress();
+      setLoading(false);
     };
     reader.readAsText(file);
   };

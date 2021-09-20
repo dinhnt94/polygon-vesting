@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { getDocAddress } from "../untils/filrebase";
+import { getDocAddress, addDocAddres } from "../untils/filrebase";
 
 export const addressContext = createContext([]);
 
@@ -20,11 +20,12 @@ function Contract({ children }) {
     setList(result);
   };
 
-  const updateStatus = ({ address, status }) => {
+  const updateStatus = (record) => {
+    const { address, status } = record;
     const index = list.findIndex((element) => element.address === address);
     const temp = [...list];
-
     if (temp[index]) temp[index].status = status;
+    addDocAddres(record);
     setList(temp);
   };
 
