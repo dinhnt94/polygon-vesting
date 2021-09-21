@@ -1,10 +1,9 @@
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { getDocAddress, addDocAddres } from "../untils/filrebase";
 
 export const addressContext = createContext([]);
 
 function Contract({ children }) {
-  const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -42,12 +41,7 @@ function Contract({ children }) {
     updateStatus,
     addDoc
   };
-  return (
-    <addressContext.Provider value={value}>
-      {children}
-      {loading && <div className="loading">Loading ...</div>}
-    </addressContext.Provider>
-  );
+  return <addressContext.Provider value={value}>{children}</addressContext.Provider>;
 }
 
 export default Contract;

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../constant";
+import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../untils/config";
 import { BoxLoading } from "react-loadingg";
 import Web3 from "web3";
 import { Result } from "antd";
@@ -76,7 +76,7 @@ function Contract({ children }) {
       const balance = await PToken.methods.beneficiaries(address).call();
 
       setLoading(false);
-      return balance[0] / Math.pow(10, 18);
+      return balance;
     } catch (error) {
       console.log(error);
       setLoading(false);
