@@ -21,13 +21,12 @@ const FormAddAddress = () => {
   };
   return (
     <Form {...formItemLayout} form={form} onFinish={onFinish}>
-      <Form.Item label="Address wallet" name="address">
-        <Input placeholder="Address wallet" />
+      <Form.Item label="Wallet Address" name="address">
+        <Input placeholder="Wallet Address" />
       </Form.Item>
       <Form.Item label="Amount" name="amount">
         <InputNumber style={{ width: "100%" }} placeholder="Amount transfer" />
       </Form.Item>
-
       <Button type="primary" htmlType="submit">
         Add to list address
       </Button>

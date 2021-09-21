@@ -1,22 +1,31 @@
-import { Table, Tag, Space, Button, notification } from "antd";
+import { Table, Tag, Space, Button, notification, Modal } from "antd";
 import { useContract } from "../../hooks/contract";
 import { useAddress } from "../../hooks/address";
 import { useState } from "react";
 
 const Balance = ({ record }) => {
-  const [balance, setBalance] = useState(null);
   const { balanceOf } = useContract();
   const onClick = async () => {
     const reuslt = await balanceOf(record.address);
-    setBalance(reuslt);
+    const balance = reuslt[0] / Math.pow(10, 18);
+    Modal.info({
+      title: "Info Wallet Adddress",
+      content: (
+        <div style={{ paddingTop: 20 }}>
+          <p>InitBalance: {balance}</p>
+          <p>MethodsClaimed: {reuslt[1]}</p>
+          <p>TotalClaimed: {reuslt[2]}</p>
+        </div>
+      ),
+      onOk() {}
+    });
   };
 
   return (
     <Space size="middle">
       <Button type="" onClick={onClick}>
-        Get Balance
+        Get detail
       </Button>
-      {balance}
     </Space>
   );
 };
@@ -32,12 +41,7 @@ const columns = [
     key: "amount",
     dataIndex: "amount"
   },
-  {
-    title: "balance",
-    key: "balance",
-    dataIndex: "",
-    render: (text, record) => <Balance record={record} />
-  },
+
   {
     title: "status",
     key: "status",
@@ -51,6 +55,12 @@ const columns = [
     title: "Action",
     key: "action",
     render: (text, record) => <Action record={record} />
+  },
+  {
+    title: "Validate",
+    key: "Validate",
+    dataIndex: "",
+    render: (text, record) => <Balance record={record} />
   }
 ];
 
