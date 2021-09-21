@@ -46,7 +46,7 @@ function Contract({ children }) {
   const approve = async (amount) => {
     const BToken = constractBcoin.current;
     const price = (amount * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
-    console.log(price);
+
     setLoading(true);
     try {
       await BToken.methods.approve(PRIVATESALEBCOINVESTING.address, price).send({ from: account.current });

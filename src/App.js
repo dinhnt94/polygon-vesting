@@ -11,13 +11,13 @@ function App() {
     <Contract>
       <Router>
         <Switch>
-          <Route exact path="/tool">
+          {/* <Route exact path="/tool">
             <Address>
               <Tool />
             </Address>
-          </Route>
+          </Route> */}
 
-          <Route exact path="/">
+          <Route path="/">
             <Home />
           </Route>
         </Switch>
