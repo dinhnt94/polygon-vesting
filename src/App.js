@@ -16,9 +16,7 @@ function App() {
               <Tool />
             </Address>
           </Route>
-          <Route exact path="/claim">
-            <Clarm />
-          </Route>
+
           <Route exact path="/">
             <Home />
           </Route>

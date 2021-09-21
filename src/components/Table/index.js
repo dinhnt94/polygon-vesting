@@ -13,7 +13,7 @@ const Balance = ({ record }) => {
         <div style={{ paddingTop: 20 }}>
           <p>InitBalance: {balance}</p>
           <p>MethodsClaimed: {reuslt[1]}</p>
-          <p>TotalClaimed: {reuslt[2]}</p>
+          <p>TotalClaimed: {reuslt[2] / Math.pow(10, 18)}</p>
         </div>
       ),
       onOk() {}

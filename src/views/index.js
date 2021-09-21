@@ -1,11 +1,14 @@
-import { Row, Col, Button, notification, Result } from "antd";
+import { notification } from "antd";
 import { useContract } from "../hooks/contract";
 import { useState, useEffect } from "react";
+import { Fragment } from "react";
+
+const SECONDS_PER_MONTH = 2628000;
 
 const App = () => {
   const [info, setInfo] = useState({});
   const [timeStart, setTimeStart] = useState(0);
-  const { claimVestedToken, balanceOf, vestingStartAt } = useContract();
+  const { claimVestedToken, balanceOf, vestingStartAt, connectBcoin } = useContract();
   const onClick = async () => {
     const result = await claimVestedToken();
     if (result) {
@@ -23,6 +26,24 @@ const App = () => {
     }
   };
 
+  const connectWallet = async () => {
+    const result = await connectBcoin();
+
+    if (result && result.account) {
+      const balance = await balanceOf();
+      const time = await vestingStartAt();
+      setInfo(balance);
+      setTimeStart(time);
+      notification.success({
+        message: "Connect to success"
+      });
+    } else {
+      notification.error({
+        message: "Not Found Metamask"
+      });
+    }
+  };
+
   useEffect(() => {
     const getInfo = async () => {
       const balance = await balanceOf();
@@ -30,19 +51,52 @@ const App = () => {
       setInfo(balance);
       setTimeStart(time);
     };
-    getInfo();
+    // getInfo();
   }, []);
 
   const current_time = parseInt(new Date().getTime() / 1000);
   const time = current_time - timeStart;
-  const monthClaim = Math.floor(time / (24 * 60 * 60) / 30);
+  const monthClaim = Math.floor(time / SECONDS_PER_MONTH);
+  console.log("monthClaim", monthClaim);
 
   const balance = (info.initialBalance - info.totalClaimed) / Math.pow(10, 18);
-  const isShowClaim = monthClaim > info.monthsClaimed && balance > 0 ? true : false;
+  const isClaim = monthClaim / SECONDS_PER_MONTH > parseInt(info.monthsClaimed) ? true : false;
 
+  const next = parseInt(Math.ceil(time / SECONDS_PER_MONTH) * SECONDS_PER_MONTH) + parseInt(timeStart);
+  const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
+  const totalClaimed = info.totalClaimed / Math.pow(10, 18);
+  const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
+  console.log(monthClaim, month_not_claim);
+  const amount_can_be_claim = month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 10) : "0";
   return (
-    <div>
-      <Row gutter={[20, 20]} style={{ marginTop: 100 }}></Row>
+    <div className="container-claim" style={{ background: "url(/picture.jpg)", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
+      <div className="wrap-claim">
+        <div className="claim">
+          <div className="claim-card">
+            {info.initialBalance !== undefined && (
+              <Fragment>
+                <p>Init Balance: {balance + totalClaimed}</p>
+                <p>Current Balance: {balance}</p>
+                <p>Month Claimed: {info.monthsClaimed}</p>
+                <p>Total Bcoin Claimed: {totalClaimed}</p>
+                <p>Next Claimable On: {nextDate}</p>
+                <p>Amount of BCOIN that can be claimed: {amount_can_be_claim}</p>
+                <button onClick={onClick} disabled={!isClaim} className={"button-claim " + (!isClaim ? "disbaled" : "")}>
+                  Claim
+                </button>
+              </Fragment>
+            )}
+
+            {info.initialBalance === undefined && (
+              <div style={{textAlign: "center"}}>
+                <button onClick={connectWallet} className={"button-claim "}>
+                  Connect to Metamask Wallet
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
