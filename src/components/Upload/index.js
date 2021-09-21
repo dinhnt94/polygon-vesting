@@ -1,4 +1,4 @@
-import { addDocAddres } from "../../untils/filrebase";
+import { addDocAddres } from "../../utils/filrebase";
 import { useAddress } from "../../hooks/address";
 import { useContract } from "../../hooks/contract";
 const CSVToArray = (data, delimiter = ",", omitFirstRow = false) =>

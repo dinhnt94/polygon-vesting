@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getDocAddress, addDocAddres } from "../untils/filrebase";
+import { getDocAddress, addDocAddres } from "../utils/filrebase";
 
 export const addressContext = createContext([]);
 

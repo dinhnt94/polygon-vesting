@@ -35,7 +35,7 @@ const App = () => {
       setInfo(balance);
       setTimeStart(time);
       notification.success({
-        message: "Connect to success"
+        message: "Connected to wallet"
       });
     } else {
       notification.error({
@@ -88,7 +88,7 @@ const App = () => {
             )}
 
             {info.initialBalance === undefined && (
-              <div style={{textAlign: "center"}}>
+              <div style={{ textAlign: "center" }}>
                 <button onClick={connectWallet} className={"button-claim "}>
                   Connect to Metamask Wallet
                 </button>

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../untils/config";
+import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../utils/config";
 import { BoxLoading } from "react-loadingg";
 import Web3 from "web3";
 import { Result } from "antd";
