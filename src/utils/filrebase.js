@@ -7,14 +7,14 @@ import { doc, setDoc, getFirestore, collection, getDocs, query, where } from "fi
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBrSCwi5HjfTqsPBk48gUKWhC7ciQpzunk",
-  authDomain: "test-8cb1b.firebaseapp.com",
-  projectId: "test-8cb1b",
-  storageBucket: "test-8cb1b.appspot.com",
-  messagingSenderId: "419654618621",
-  appId: "1: 419654618621: web: 881a365ea7d0c74b469d94",
-  measurementId: "G-RM6Y7EYK49"
+const firebaseConfig = { 
+  apiKey : "AIzaSyApX07OmMG577TqrqTiWWKzHjpwZfq_1D4" , 
+  authDomain : "epichero-95988.firebaseapp.com" , 
+  projectId : "epichero-95988" , 
+  storageBucket : "epichero-95988.appspot.com" , 
+  messagingSenderId : "1054401040670" , 
+  appId : "1: 1054401040670: web: 38669992d29b9da6f8b90f" , 
+  measurementId : "G-JW2YBKF5CL" 
 };
 
 // Initialize Firebase
