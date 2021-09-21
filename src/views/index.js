@@ -66,7 +66,6 @@ const App = () => {
   const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
   const totalClaimed = info.totalClaimed / Math.pow(10, 18);
   const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
-  console.log(monthClaim, month_not_claim);
   const amount_can_be_claim = month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 10) : "0";
   return (
     <div className="container-claim" style={{ background: "url(/picture.jpg)", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
@@ -75,8 +74,7 @@ const App = () => {
           <div className="claim-card">
             {info.initialBalance !== undefined && (
               <Fragment>
-                <p>Init Balance: {balance + totalClaimed}</p>
-                <p>Current Balance: {balance}</p>
+                <p>Vested Balance: {balance + totalClaimed}</p>
                 <p>Month Claimed: {info.monthsClaimed}</p>
                 <p>Total Bcoin Claimed: {totalClaimed}</p>
                 <p>Next Claimable On: {nextDate}</p>
