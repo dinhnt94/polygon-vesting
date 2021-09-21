@@ -22,6 +22,6 @@ npm i
 npm start
 ```
 ---
-## About the /tools 
+## About the tool
 
-There is a /tools for admin to add beneficiary and store the the result on firebase. This page SHOULD NOT be published to the normal users. 
+There is tool for admin to add beneficiary and store the the result on firebase. This page SHOULD NOT be published to the normal users.
