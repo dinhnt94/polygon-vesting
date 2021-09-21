@@ -1,7 +1,6 @@
 import { Table, Tag, Space, Button, notification, Modal } from "antd";
 import { useContract } from "../../hooks/contract";
 import { useAddress } from "../../hooks/address";
-import { useState } from "react";
 
 const Balance = ({ record }) => {
   const { balanceOf } = useContract();

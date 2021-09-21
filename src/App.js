@@ -1,15 +1,29 @@
 import Contract from "./context/contract";
 import Address from "./context/address";
-
+import Tool from "./views/tool";
+import Clarm from "./views/claim";
 import Home from "./views/index";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 function App() {
   return (
     <Contract>
-      <Address>
-        <Home />
-      </Address>
+      <Router>
+        <Switch>
+          <Route exact path="/tool">
+            <Address>
+              <Tool />
+            </Address>
+          </Route>
+          <Route exact path="/claim">
+            <Clarm />
+          </Route>
+          <Route exact path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
     </Contract>
   );
 }

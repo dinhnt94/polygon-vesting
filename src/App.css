@@ -1,3 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Germania+One&display=swap");
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+body,
+html {
+  font-family: "Germania One", cursive;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 0rem 10rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.425);
+}
+
 .App {
   text-align: center;
 }
@@ -53,6 +116,51 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.425);
-  
+  background: rgba(91, 91, 141, 0.2);
+}
+
+.container-claim {
+  min-height: 100vh;
+  background: url(https://storage.googleapis.com/epic-cdn/public/landing/bg-1.webp);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.claim {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 25%, rgba(0, 0, 0, 0.6) 60%, #000 90%);
+  padding: 20px 50px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.claim-card {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  display: inline-block;
+  padding: 20px;
+  font-size: 26px;
+  font-weight: bold;
+  min-width: 700px;
+}
+
+.button-claim {
+  background-color: #f57c00 !important;
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: none;
+  cursor: pointer;
+}
+.button-claim.disbaled {
+  background-color: gray !important ;
+  color: rgba(255, 255, 255, 0.534);
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: none;
 }

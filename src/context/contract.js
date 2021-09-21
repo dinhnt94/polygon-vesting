@@ -17,7 +17,6 @@ function Contract({ children }) {
   const enableEthereum = async () => {
     if (window.ethereum) {
       await window.ethereum.enable();
-      setConnect("success");
       return true;
     } else {
       setConnect("fail");
@@ -28,6 +27,7 @@ function Contract({ children }) {
   const connectBcoin = async () => {
     const connected = await enableEthereum();
     if (!connected) return;
+ 
 
     const web3 = await new Web3(window.ethereum);
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -36,6 +36,11 @@ function Contract({ children }) {
     constractBcoin.current = BToken;
     account.current = accounts[0];
     web3Ref.current = web3;
+
+    setConnect("success");
+    return {
+      account: account.current
+    };
   };
 
   const approve = async (amount) => {
@@ -59,7 +64,7 @@ function Contract({ children }) {
     const price = (amount * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
     setLoading(true);
     try {
-      await await PToken.methods.addBeneficiary(address, price).send({ from: account.current });
+      await PToken.methods.addBeneficiary(address, price).send({ from: account.current });
       setLoading(false);
       return true;
     } catch (error) {
@@ -69,12 +74,25 @@ function Contract({ children }) {
     }
   };
 
-  const balanceOf = async (address) => {
+  const vestingStartAt = async () => {
+    const PToken = PrivateSaleCT.current;
+    setLoading(true);
+    try {
+      const startAt = await PToken.methods.vestingStartAt().call();
+      setLoading(false);
+      return parseInt(startAt);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      return 0;
+    }
+  };
+
+  const balanceOf = async (address = account.current) => {
     const PToken = PrivateSaleCT.current;
     setLoading(true);
     try {
       const balance = await PToken.methods.beneficiaries(address).call();
-
       setLoading(false);
       return balance;
     } catch (error) {
@@ -84,16 +102,30 @@ function Contract({ children }) {
     }
   };
 
+  const claimVestedToken = async () => {
+    const PToken = PrivateSaleCT.current;
+    setLoading(true);
+    try {
+      await PToken.methods.claimVestedToken(account.current).send();
+      setLoading(false);
+      return true;
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      return false;
+    }
+  };
+
   useEffect(() => {
-    connectBcoin();
+    // connectBcoin();
   }, []);
 
-  const value = { BToken: constractBcoin.current, dress_account: account.current, setLoading: setLoading, approve, confirm, balanceOf };
+  const value = { connectBcoin, BToken: constractBcoin.current, dress_account: account.current, setLoading: setLoading, approve, confirm, balanceOf, claimVestedToken, vestingStartAt };
 
   return (
     <contextWeb3.Provider value={value}>
-      {connect === "success" && children}
-      {connect === "fail" && <Result status="404" title="404" subTitle="Sorry, Not found Metamask Wallet." />}
+      {children}
+      {/* {connect === "fail" && <Result status="404" title="404" subTitle="Sorry, Not found Metamask Wallet." />} */}
       {loading && (
         <div className="loading">
           <BoxLoading size="large" />;
