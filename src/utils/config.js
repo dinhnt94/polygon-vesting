@@ -1,13 +1,13 @@
 // config edit here
-export const BCOINTOKEN_SMC = "0x288aDf230427b3B6De2497ac9161aD5482529031";
-export const PRIVATESALEBCOINVESTING_SMC = "0x229acEf8296018812D92f20ee723fC5BD439E08c";
+export const BCOINTOKEN_SMC = "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D";
+export const PRIVATESALEBCOINVESTING_SMC = "0xBA9e1f6668396947d0a6b574Ab73a05eB3cF2C3c";
 // end config edit
 export const BCOINTOKEN = {
   address: BCOINTOKEN_SMC,
   abi: [
     {
       inputs: [],
-      stateMutability: "payable",
+      stateMutability: "nonpayable",
       type: "constructor"
     },
     {
@@ -41,6 +41,31 @@ export const BCOINTOKEN = {
         {
           indexed: true,
           internalType: "address",
+          name: "previousOwner",
+          type: "address"
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "newOwner",
+          type: "address"
+        }
+      ],
+      name: "OwnershipTransferred",
+      type: "event"
+    },
+    {
+      anonymous: false,
+      inputs: [],
+      name: "Pause",
+      type: "event"
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
           name: "from",
           type: "address"
         },
@@ -58,6 +83,12 @@ export const BCOINTOKEN = {
         }
       ],
       name: "Transfer",
+      type: "event"
+    },
+    {
+      anonymous: false,
+      inputs: [],
+      name: "Unpause",
       type: "event"
     },
     {
@@ -128,6 +159,19 @@ export const BCOINTOKEN = {
       type: "function"
     },
     {
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256"
+        }
+      ],
+      name: "burn",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function"
+    },
+    {
       inputs: [],
       name: "decimals",
       outputs: [
@@ -189,21 +233,16 @@ export const BCOINTOKEN = {
       type: "function"
     },
     {
-      inputs: [
+      inputs: [],
+      name: "isOwner",
+      outputs: [
         {
-          internalType: "address",
-          name: "account",
-          type: "address"
-        },
-        {
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256"
+          internalType: "bool",
+          name: "",
+          type: "bool"
         }
       ],
-      name: "mint",
-      outputs: [],
-      stateMutability: "nonpayable",
+      stateMutability: "view",
       type: "function"
     },
     {
@@ -230,6 +269,39 @@ export const BCOINTOKEN = {
         }
       ],
       stateMutability: "view",
+      type: "function"
+    },
+    {
+      inputs: [],
+      name: "pause",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool"
+        }
+      ],
+      stateMutability: "nonpayable",
+      type: "function"
+    },
+    {
+      inputs: [],
+      name: "paused",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool"
+        }
+      ],
+      stateMutability: "view",
+      type: "function"
+    },
+    {
+      inputs: [],
+      name: "renounceOwnership",
+      outputs: [],
+      stateMutability: "nonpayable",
       type: "function"
     },
     {
@@ -301,6 +373,32 @@ export const BCOINTOKEN = {
         }
       ],
       name: "transferFrom",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool"
+        }
+      ],
+      stateMutability: "nonpayable",
+      type: "function"
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "newOwner",
+          type: "address"
+        }
+      ],
+      name: "transferOwnership",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function"
+    },
+    {
+      inputs: [],
+      name: "unpause",
       outputs: [
         {
           internalType: "bool",
