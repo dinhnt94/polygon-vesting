@@ -23,7 +23,7 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
     abi: [
       {
         inputs: [],
-        stateMutability: "payable",
+        stateMutability: "nonpayable",
         type: "constructor"
       },
       {
@@ -57,6 +57,31 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           {
             indexed: true,
             internalType: "address",
+            name: "previousOwner",
+            type: "address"
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "newOwner",
+            type: "address"
+          }
+        ],
+        name: "OwnershipTransferred",
+        type: "event"
+      },
+      {
+        anonymous: false,
+        inputs: [],
+        name: "Pause",
+        type: "event"
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "address",
             name: "from",
             type: "address"
           },
@@ -74,6 +99,12 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           }
         ],
         name: "Transfer",
+        type: "event"
+      },
+      {
+        anonymous: false,
+        inputs: [],
+        name: "Unpause",
         type: "event"
       },
       {
@@ -144,6 +175,19 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
         type: "function"
       },
       {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256"
+          }
+        ],
+        name: "burn",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
         inputs: [],
         name: "decimals",
         outputs: [
@@ -205,21 +249,16 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
         type: "function"
       },
       {
-        inputs: [
+        inputs: [],
+        name: "isOwner",
+        outputs: [
           {
-            internalType: "address",
-            name: "account",
-            type: "address"
-          },
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256"
+            internalType: "bool",
+            name: "",
+            type: "bool"
           }
         ],
-        name: "mint",
-        outputs: [],
-        stateMutability: "nonpayable",
+        stateMutability: "view",
         type: "function"
       },
       {
@@ -246,6 +285,39 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           }
         ],
         stateMutability: "view",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "pause",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool"
+          }
+        ],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "paused",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool"
+          }
+        ],
+        stateMutability: "view",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "renounceOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function"
       },
       {
@@ -317,6 +389,32 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           }
         ],
         name: "transferFrom",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool"
+          }
+        ],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "newOwner",
+            type: "address"
+          }
+        ],
+        name: "transferOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "unpause",
         outputs: [
           {
             internalType: "bool",
