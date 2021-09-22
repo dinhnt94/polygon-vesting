@@ -23,7 +23,7 @@ const db = getFirestore();
 export default app;
 
 const env = window.location.pathname.replace("/", "");
-const name_address = "address_" + env;
+const name_address = "address_" + (env === "" ? "private" : env);
 
 export async function getDocAddress() {
   const q = query(collection(db, name_address));
