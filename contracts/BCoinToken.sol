@@ -9,19 +9,7 @@ contract BCoinToken is BEP20Detailed, BEP20 {
     _mint(msg.sender, totalTokens);
   }
 
-  function transfer(address _receiver, uint256 _amount) public virtual override returns (bool success) {
-    require(_receiver != address(0), "zero-address");
-    return BEP20.transfer(_receiver, _amount);
-  }
-
-  function transferFrom(
-    address _from,
-    address _receiver,
-    uint256 _amount
-  ) public virtual override returns (bool) {
-    require(_from != address(0), "zero-address");
-    require(_receiver != address(0), "zero-address");
-    require(_amount <= allowance(_from, msg.sender), "BEP20: transfer amount exceeds allowance");
-    return BEP20.transferFrom(_from, _receiver, _amount);
+  function burn(uint256 amount) external {
+    _burn(msg.sender, amount);
   }
 }
