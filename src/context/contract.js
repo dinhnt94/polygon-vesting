@@ -1,15 +1,14 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../utils/config";
+import { getConfig } from "../utils/config";
 import { BoxLoading } from "react-loadingg";
 import Web3 from "web3";
 import { Result } from "antd";
 
 export const contextWeb3 = createContext("Default Value");
 
-function Contract({ children }) {
+function Contract({ children, type }) {
   const [loading, setLoading] = useState(false);
-  const [connect, setConnect] = useState("loading");
-
+  const { BCOINTOKEN, PRIVATESALEBCOINVESTING } = getConfig(type);
   const constractBcoin = useRef({});
   const PrivateSaleCT = useRef({});
   const web3Ref = useRef({});
@@ -19,7 +18,6 @@ function Contract({ children }) {
       await window.ethereum.enable();
       return true;
     } else {
-      setConnect("fail");
       return false;
     }
   };
@@ -27,7 +25,6 @@ function Contract({ children }) {
   const connectBcoin = async () => {
     const connected = await enableEthereum();
     if (!connected) return;
- 
 
     const web3 = await new Web3(window.ethereum);
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -37,7 +34,6 @@ function Contract({ children }) {
     account.current = accounts[0];
     web3Ref.current = web3;
 
-    setConnect("success");
     return {
       account: account.current
     };

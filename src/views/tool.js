@@ -5,7 +5,7 @@ import FormAdd from "../components/Form";
 import { useEffect } from "react";
 import { useContract } from "../hooks/contract";
 
-const App = () => {
+const App = ({type}) => {
   const { connectBcoin } = useContract();
   useEffect(() => {
     const init = async () => {
@@ -24,9 +24,14 @@ const App = () => {
     };
     init();
   }, []);
-
+  let name = window.location.pathname.replace("/", "");
+  
   return (
     <div className="container">
+      <h1>
+        Tool
+        <span style={{ textTransform: "capitalize" }}> {type}</span>
+      </h1>
       <Row gutter={[20, 20]} style={{ marginTop: 100 }}>
         <Col span="20">
           <FormAdd />
