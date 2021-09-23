@@ -2,18 +2,28 @@
 const token_env = {
   // smc config private
   private: {
-    BCOINTOKEN_SMC: "0x288aDf230427b3B6De2497ac9161aD5482529031",
-    PRIVATESALEBCOINVESTING_SMC: "0x229acEf8296018812D92f20ee723fC5BD439E08c"
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
+    PRIVATESALEBCOINVESTING_SMC: "0x00af63f9d03395e969d21a90547c2e896e18f071"
   },
-  // smc config dev
-  dev: {
-    BCOINTOKEN_SMC: "0x288aDf230427b3B6De2497ac9161aD5482529031",
-    PRIVATESALEBCOINVESTING_SMC: "0x229acEf8296018812D92f20ee723fC5BD439E08c"
+  // smc config team
+  team: {
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
+    PRIVATESALEBCOINVESTING_SMC: "0x1f92505043511b5af8bd1e1ce17c166d8fc05952"
   },
   // smc config advisor
   advisor: {
-    BCOINTOKEN_SMC: "0x288aDf230427b3B6De2497ac9161aD5482529031",
-    PRIVATESALEBCOINVESTING_SMC: "0x229acEf8296018812D92f20ee723fC5BD439E08c"
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
+    PRIVATESALEBCOINVESTING_SMC: "0x8b62bf1b4234911b3449f1e1c71f30686b4fad0f"
+  },
+  // smc config dex
+  dex: {
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
+    PRIVATESALEBCOINVESTING_SMC: "0x4a7102a9c7bbdd588cb37465291e97e1e6a2270f"
+  },
+  // smc config reserve
+  reserve: {
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
+    PRIVATESALEBCOINVESTING_SMC: "0xee08e835c24a45dccb0be799e0ce1b98fb9a5c52"
   }
 };
 // end config edit
@@ -23,7 +33,7 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
     abi: [
       {
         inputs: [],
-        stateMutability: "payable",
+        stateMutability: "nonpayable",
         type: "constructor"
       },
       {
@@ -57,6 +67,31 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           {
             indexed: true,
             internalType: "address",
+            name: "previousOwner",
+            type: "address"
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "newOwner",
+            type: "address"
+          }
+        ],
+        name: "OwnershipTransferred",
+        type: "event"
+      },
+      {
+        anonymous: false,
+        inputs: [],
+        name: "Pause",
+        type: "event"
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "address",
             name: "from",
             type: "address"
           },
@@ -74,6 +109,12 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           }
         ],
         name: "Transfer",
+        type: "event"
+      },
+      {
+        anonymous: false,
+        inputs: [],
+        name: "Unpause",
         type: "event"
       },
       {
@@ -144,6 +185,19 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
         type: "function"
       },
       {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256"
+          }
+        ],
+        name: "burn",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
         inputs: [],
         name: "decimals",
         outputs: [
@@ -205,21 +259,16 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
         type: "function"
       },
       {
-        inputs: [
+        inputs: [],
+        name: "isOwner",
+        outputs: [
           {
-            internalType: "address",
-            name: "account",
-            type: "address"
-          },
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256"
+            internalType: "bool",
+            name: "",
+            type: "bool"
           }
         ],
-        name: "mint",
-        outputs: [],
-        stateMutability: "nonpayable",
+        stateMutability: "view",
         type: "function"
       },
       {
@@ -246,6 +295,39 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           }
         ],
         stateMutability: "view",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "pause",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool"
+          }
+        ],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "paused",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool"
+          }
+        ],
+        stateMutability: "view",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "renounceOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function"
       },
       {
@@ -317,6 +399,32 @@ const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {
           }
         ],
         name: "transferFrom",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool"
+          }
+        ],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "newOwner",
+            type: "address"
+          }
+        ],
+        name: "transferOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+      },
+      {
+        inputs: [],
+        name: "unpause",
         outputs: [
           {
             internalType: "bool",
