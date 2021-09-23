@@ -11,17 +11,17 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/private">
           <Contract type="private">
             <Address type="private">
               <Tool type="private" />
             </Address>
           </Contract>
         </Route>
-        <Route exact path="/private">
-          <Contract type="private">
-            <Address type="private">
-              <Tool type="private" />
+        <Route exact path="/team">
+          <Contract type="team">
+            <Address type="team">
+              <Tool type="team" />
             </Address>
           </Contract>
         </Route>
@@ -32,10 +32,17 @@ function App() {
             </Address>
           </Contract>
         </Route>
-        <Route exact path="/dev">
-          <Contract type="dev">
-            <Address type="dev">
-              <Tool type="dev" />
+        <Route exact path="/dex">
+          <Contract type="dex">
+            <Address type="dex">
+              <Tool type="dex" />
+            </Address>
+          </Contract>
+        </Route>
+        <Route exact path="/reserve">
+          <Contract type="reserve">
+            <Address type="reserve">
+              <Tool type="reserve" />
             </Address>
           </Contract>
         </Route>
