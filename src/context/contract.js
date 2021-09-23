@@ -8,6 +8,7 @@ export const contextWeb3 = createContext("Default Value");
 
 function Contract({ children, type }) {
   const [loading, setLoading] = useState(false);
+  const [timeArt, setTimeArt] = useState(0);
   const { BCOINTOKEN, PRIVATESALEBCOINVESTING } = getConfig(type);
   const constractBcoin = useRef({});
   const PrivateSaleCT = useRef({});
@@ -28,11 +29,20 @@ function Contract({ children, type }) {
 
     const web3 = await new Web3(window.ethereum);
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    const BToken = await new web3.eth.Contract(BCOINTOKEN.abi, BCOINTOKEN.address, { from: accounts[0] });
-    PrivateSaleCT.current = await new web3.eth.Contract(PRIVATESALEBCOINVESTING.abi, PRIVATESALEBCOINVESTING.address, { from: accounts[0] });
+    const BToken = await new web3.eth.Contract(BCOINTOKEN.abi, BCOINTOKEN.address, {
+      from: accounts[0]
+    });
+    PrivateSaleCT.current = await new web3.eth.Contract(
+      PRIVATESALEBCOINVESTING.abi,
+      PRIVATESALEBCOINVESTING.address,
+      { from: accounts[0] }
+    );
     constractBcoin.current = BToken;
     account.current = accounts[0];
     web3Ref.current = web3;
+
+    const time = await vestingStartAt();
+    setTimeArt(time);
 
     return {
       account: account.current
@@ -45,7 +55,9 @@ function Contract({ children, type }) {
 
     setLoading(true);
     try {
-      await BToken.methods.approve(PRIVATESALEBCOINVESTING.address, price).send({ from: account.current });
+      await BToken.methods
+        .approve(PRIVATESALEBCOINVESTING.address, price)
+        .send({ from: account.current });
       setLoading(false);
       return true;
     } catch (error) {
@@ -112,16 +124,41 @@ function Contract({ children, type }) {
     }
   };
 
+  const claimVestedTokenByAddress = async (address) => {
+    const PToken = PrivateSaleCT.current;
+    setLoading(true);
+    try {
+      await PToken.methods.claimVestedToken(address).send();
+      setLoading(false);
+      return true;
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      return false;
+    }
+  };
+
   useEffect(() => {
     // connectBcoin();
   }, []);
 
-  const value = { connectBcoin, BToken: constractBcoin.current, dress_account: account.current, setLoading: setLoading, approve, confirm, balanceOf, claimVestedToken, vestingStartAt };
+  const value = {
+    connectBcoin,
+    BToken: constractBcoin.current,
+    dress_account: account.current,
+    setLoading: setLoading,
+    approve,
+    confirm,
+    balanceOf,
+    claimVestedToken,
+    vestingStartAt,
+    timeArt,
+    claimVestedTokenByAddress
+  };
 
   return (
     <contextWeb3.Provider value={value}>
       {children}
-      {/* {connect === "fail" && <Result status="404" title="404" subTitle="Sorry, Not found Metamask Wallet." />} */}
       {loading && (
         <div className="loading">
           <BoxLoading size="large" />;

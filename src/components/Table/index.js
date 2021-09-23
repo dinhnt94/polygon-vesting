@@ -1,23 +1,18 @@
 import { Table, Tag, Space, Button, notification, Modal } from "antd";
 import { useContract } from "../../hooks/contract";
 import { useAddress } from "../../hooks/address";
+import { useState } from "react";
+import ModalDetail from "./modal";
 
 const Balance = ({ record }) => {
-  const { balanceOf } = useContract();
+  const { balanceOf, timeArt, claimVestedTokenByAddress } = useContract();
+  const [info, setInfo] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const onClick = async () => {
-    const reuslt = await balanceOf(record.address);
-    const balance = reuslt[0] / Math.pow(10, 18);
-    Modal.info({
-      title: "Info Wallet Adddress",
-      content: (
-        <div style={{ paddingTop: 20 }}>
-          <p>InitBalance: {balance}</p>
-          <p>MethodsClaimed: {reuslt[1]}</p>
-          <p>TotalClaimed: {reuslt[2] / Math.pow(10, 18)}</p>
-        </div>
-      ),
-      onOk() {}
-    });
+    let info_result = await balanceOf(record.address);
+    setInfo(info_result);
+    setIsModalVisible(true);
   };
 
   return (
@@ -25,6 +20,13 @@ const Balance = ({ record }) => {
       <Button type="" onClick={onClick}>
         Get detail
       </Button>
+      <ModalDetail
+        info={info}
+        setInfo={setInfo}
+        address={record.address}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      />
     </Space>
   );
 };
@@ -72,6 +74,9 @@ const Action = ({ record }) => {
     const result_approve = await approve(amount);
     if (result_approve) {
       record.status = "approve";
+      notification.success({
+        message: "Approve Success"
+      });
       updateStatus(record);
     } else {
       notification.error({
@@ -85,6 +90,9 @@ const Action = ({ record }) => {
     const result_approve = await confirm(record);
     if (result_approve) {
       record.status = "completed";
+      notification.success({
+        message: "Success"
+      });
       updateStatus(record);
     } else {
       notification.error({
@@ -119,7 +127,14 @@ const Action = ({ record }) => {
 const App = () => {
   const { list } = useAddress();
   if (list.length === 0) return null;
-  return <Table columns={columns} dataSource={list} rowKey={(record, index) => index} hideOnSinglePage={true} />;
+  return (
+    <Table
+      columns={columns}
+      dataSource={list}
+      rowKey={(record, index) => index}
+      hideOnSinglePage={true}
+    />
+  );
 };
 
 export default App;
