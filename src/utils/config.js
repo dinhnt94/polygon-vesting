@@ -12,12 +12,12 @@ const token_env = {
   },
   // smc config advisor
   advisor: {
-    BCOINTOKEN_SMC: "0x8b62bf1b4234911b3449f1e1c71f30686b4fad0f",
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
     PRIVATESALEBCOINVESTING_SMC: "0x8b62bf1b4234911b3449f1e1c71f30686b4fad0f"
   },
   // smc config dex
   dex: {
-    BCOINTOKEN_SMC: "0x4a7102a9c7bbdd588cb37465291e97e1e6a2270f",
+    BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
     PRIVATESALEBCOINVESTING_SMC: "0x4a7102a9c7bbdd588cb37465291e97e1e6a2270f"
   },
   // smc config reserve
