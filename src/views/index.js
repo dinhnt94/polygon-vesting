@@ -2,6 +2,7 @@ import { notification } from "antd";
 import { useContract } from "../hooks/contract";
 import { useState, useEffect } from "react";
 import { Fragment } from "react";
+import moment from "moment";
 
 const SECONDS_PER_MONTH = 2628000;
 
@@ -57,13 +58,17 @@ const App = () => {
   const current_time = parseInt(new Date().getTime() / 1000);
   const time = current_time - timeStart;
   const monthClaim = Math.floor(time / SECONDS_PER_MONTH);
-  console.log("monthClaim", monthClaim);
-
   const balance = (info.initialBalance - info.totalClaimed) / Math.pow(10, 18);
   const isClaim = monthClaim / SECONDS_PER_MONTH > parseInt(info.monthsClaimed) ? true : false;
-
   const next = parseInt(Math.ceil(time / SECONDS_PER_MONTH) * SECONDS_PER_MONTH) + parseInt(timeStart);
-  const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
+  // const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
+  const nextDate = moment.unix(next).format("MM/DD/YYYY");
+
+  console.log("monthClaim", monthClaim);
+  console.log("=========");
+  console.log(next, nextDate);
+  console.log("=========");
+
   const totalClaimed = info.totalClaimed / Math.pow(10, 18);
   const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
   const amount_can_be_claim = month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 10) : "0";
