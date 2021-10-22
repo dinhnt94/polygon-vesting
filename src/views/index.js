@@ -83,7 +83,7 @@ const App = () => {
                 <p>Month Claimed: {info.monthsClaimed}</p>
                 <p>Total Bcoin Claimed: {totalClaimed}</p>
                 <p>Next Claimable On: {nextDate}</p>
-                <p>Amount of BCOIN that can be claimed: {amount_can_be_claim}</p>
+                {/* <p>Amount of BCOIN that can be claimed: {amount_can_be_claim}</p> */}
                 <button onClick={onClick} disabled={!isClaim} className={"button-claim " + (!isClaim ? "disbaled" : "")}>
                   Claim
                 </button>
