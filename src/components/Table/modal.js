@@ -4,7 +4,7 @@ import { useAddress } from "../../hooks/address";
 import { useState } from "react";
 
 const ModalDetail = ({ address, info = {}, setInfo, isModalVisible, setIsModalVisible }) => {
-  console.log(info);
+  // console.log(info);
   const { balanceOf, timeArt, claimVestedTokenByAddress } = useContract();
   const SECONDS_PER_MONTH = 2628000;
   const current_time = parseInt(new Date().getTime() / 1000);
@@ -20,6 +20,7 @@ const ModalDetail = ({ address, info = {}, setInfo, isModalVisible, setIsModalVi
   const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
   const totalClaimed = info.totalClaimed / Math.pow(10, 18);
   const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
+  console.log(month_not_claim);
   const amount_can_be_claim =
     month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 10) : "0";
 
