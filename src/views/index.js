@@ -59,7 +59,7 @@ const App = () => {
   const time = current_time - timeStart;
   const monthClaim = Math.floor(time / SECONDS_PER_MONTH);
   const balance = (info.initialBalance - info.totalClaimed) / Math.pow(10, 18);
-  const isClaim = monthClaim / SECONDS_PER_MONTH > parseInt(info.monthsClaimed) ? true : false;
+  const isClaim = monthClaim > parseInt(info.monthsClaimed) ? true : false;
   const next = parseInt(Math.ceil(time / SECONDS_PER_MONTH) * SECONDS_PER_MONTH) + parseInt(timeStart);
   // const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
   const nextDate = moment.unix(next).format("MM/DD/YYYY");
