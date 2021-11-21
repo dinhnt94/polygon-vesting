@@ -12,7 +12,7 @@ const ModalDetail = ({ address, info = {}, setInfo, isModalVisible, setIsModalVi
   const monthClaim = Math.floor(time / SECONDS_PER_MONTH);
   const balance = (info.initialBalance - info.totalClaimed) / Math.pow(10, 18);
   const isClaim =
-    monthClaim > parseInt(info.monthsClaimed) &&
+    monthClaim / SECONDS_PER_MONTH > parseInt(info.monthsClaimed) &&
     parseFloat(info.initialBalance / Math.pow(10, 18)) > 0;
 
   const next =
@@ -20,6 +20,7 @@ const ModalDetail = ({ address, info = {}, setInfo, isModalVisible, setIsModalVi
   const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
   const totalClaimed = info.totalClaimed / Math.pow(10, 18);
   const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
+  console.log(month_not_claim);
   const amount_can_be_claim =
     month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 10) : "0";
 
