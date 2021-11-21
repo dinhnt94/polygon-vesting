@@ -3,8 +3,8 @@ import { useContract } from "../hooks/contract";
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 
-// const SECONDS_PER_MONTH = 2628000;
-const SECONDS_PER_MONTH = 24 * 30 * 60 * 60;
+const SECONDS_PER_MONTH = 2628000;
+// const SECONDS_PER_MONTH = 24 * 30 * 60 * 60;
 
 const App = () => {
   const [info, setInfo] = useState({});
