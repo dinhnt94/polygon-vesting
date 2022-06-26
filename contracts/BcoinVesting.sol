@@ -89,11 +89,24 @@ abstract contract BCoinVesting is Ownable, AccessControl {
   }
 
   // Do more adding
+  // this func too much gas
   function addWhitelists(address[] memory users, uint256[] memory amounts) public onlyOwner() {
-      require(users.length == amounts.length, "set-diff-len");
-      for (uint i = 0; i < users.length; i++) {
-          addBeneficiary(users[i], amounts[i]);
-      }
+    require(users.length == amounts.length, "set-diff-len");
+    for (uint i = 0; i < users.length; i++) {
+      addBeneficiary(users[i], amounts[i]);
+    }
+  }
+
+  //
+  function addBeneficiarys(address[] memory users, uint256[] memory amounts, uint _amountTotal) public onlyOwner() {
+    require(users.length == amounts.length, "sets-diff-len");
+    require(bcoinToken.transferFrom(_msgSender(), address(this), _amountTotal), "cannot-transfer");
+    for (uint i = 0; i < users.length; i++) {
+      require(users[i] != address(0), "zero-address");
+      // update storage data
+      Beneficiary storage bf = beneficiaries[users[i]];
+      bf.initialBalance = bf.initialBalance.add(amounts[i]);
+    }
   }
 
   // Owner can nerf user when user is blacklist
@@ -178,6 +191,14 @@ abstract contract BCoinVesting is Ownable, AccessControl {
     require(bf.initialBalance > 0, "beneficiary-not-found");
 
     return (bf.initialBalance, bf.monthsClaimed, bf.totalClaimed);
+  }
+
+  // update some var
+  function updateVestingStart(uint _vestingStartAt) external onlyOwner() {
+    vestingStartAt = _vestingStartAt;
+  }
+  function updateVestingDuration(uint _vestingDuration) external onlyOwner() {
+    vestingDuration = _vestingDuration;
   }
 
   //for emegency
