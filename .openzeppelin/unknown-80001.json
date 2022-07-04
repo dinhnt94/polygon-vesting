@@ -1,0 +1,174 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0x04ED8933eEb61344554DEc763fB8aE21D2682395",
+      "txHash": "0x5cfe781a3bdb77a2ea19426b5e1c5d2888ed7e9a48db4dbcc14324155b5d0af4",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "b63e38b4882ae81c9dfb6d4a6a33f41f46ce24b09f759f1d6209312dd45da8df": {
+      "address": "0x3f04559d0483a4a493BF4e7d45a7A7234AA32dCb",
+      "txHash": "0x05cab005b6ce4151ce437b574ad60e42750a7cf70dcdb3e19f524c04a75fba49",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:94"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:41"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)34_storage)",
+            "src": "../@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:61"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:259"
+          },
+          {
+            "contract": "ERC1967UpgradeUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "contract": "UUPSUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "contract": "PolygonBCoinVesting",
+            "label": "bcoinToken",
+            "type": "t_contract(IERC20Upgradeable)1298",
+            "src": "../project:/contracts/PolygonBombVesting.sol:27"
+          },
+          {
+            "contract": "PolygonBCoinVesting",
+            "label": "vestingStartAt",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PolygonBombVesting.sol:32"
+          },
+          {
+            "contract": "PolygonBCoinVesting",
+            "label": "vestingDuration",
+            "type": "t_uint256",
+            "src": "../project:/contracts/PolygonBombVesting.sol:35"
+          },
+          {
+            "contract": "PolygonBCoinVesting",
+            "label": "beneficiaries",
+            "type": "t_mapping(t_address,t_struct(Beneficiary)5435_storage)",
+            "src": "../project:/contracts/PolygonBombVesting.sol:50"
+          }
+        ],
+        "types": {
+          "t_contract(IERC20Upgradeable)1298": {
+            "label": "contract IERC20Upgradeable"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_struct(Beneficiary)5435_storage)": {
+            "label": "mapping(address => struct PolygonBCoinVesting.Beneficiary)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_struct(Beneficiary)5435_storage": {
+            "label": "struct PolygonBCoinVesting.Beneficiary",
+            "members": [
+              {
+                "label": "initialBalance",
+                "type": "t_uint256"
+              },
+              {
+                "label": "monthsClaimed",
+                "type": "t_uint256"
+              },
+              {
+                "label": "totalClaimed",
+                "type": "t_uint256"
+              },
+              {
+                "label": "magicPercent",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)34_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)34_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    }
+  }
+}

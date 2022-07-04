@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "@openzeppelin/contracts": "^4.6.0"
+    "@openzeppelin/contracts": "^4.6.0",
+    "@openzeppelin/contracts-upgradeable": "^4.7.0",
+    "@openzeppelin/truffle-upgrades": "^1.15.0",
+    "@truffle/hdwallet-provider": "^2.0.10",
+    "@umaprotocol/truffle-ledger-provider": "^1.0.5",
+    "truffle-contract-size": "^2.0.1",
+    "truffle-plugin-verify": "^0.5.26",
+    "web3": "^1.7.4"
   }
 }
