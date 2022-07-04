@@ -10,7 +10,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 // import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 
-contract PolygonBCoinVesting is Initializable, OwnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
+contract PolygonBCoinVestingEcoSys is Initializable, OwnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
   using SafeMathUpgradeable for uint256;
   using SafeERC20Upgradeable for IERC20Upgradeable;
 
