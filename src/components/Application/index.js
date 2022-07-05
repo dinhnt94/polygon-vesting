@@ -36,6 +36,12 @@ export default function Application({children}) {
               <Link to='/team' className={activeLink('team')}>
                 <Menu.Item key='team'>Team</Menu.Item>
               </Link>
+              <Link to='/marketing' className={activeLink('marketing')}>
+                <Menu.Item key='marketing'>Marketing</Menu.Item>
+              </Link>
+              <Link to='/ecosystem' className={activeLink('ecosystem')}>
+                <Menu.Item key='ecosystem'>Ecosystem</Menu.Item>
+              </Link>
               <Link to='/reserve' className={activeLink('reserve')}>
                 <Menu.Item key='reserve'>Reserves</Menu.Item>
               </Link>

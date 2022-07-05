@@ -26,7 +26,15 @@ const token_env = {
   reserve: {
     BCOINTOKEN_SMC: "0x00e1656e45f18ec6747F5a8496Fd39B50b38396D",
     PRIVATESALEBCOINVESTING_SMC: "0xee08e835c24a45dccb0be799e0ce1b98fb9a5c52"
-  }
+  },
+  marketing: {
+    BCOINTOKEN_SMC: '',
+    PRIVATESALEBCOINVESTING_SMC: ''
+  },
+  ecosystem: {
+    BCOINTOKEN_SMC: '',
+    PRIVATESALEBCOINVESTING_SMC: ''
+  },
 };
 // end config edit
 const setConfig = ({ BCOINTOKEN_SMC, PRIVATESALEBCOINVESTING_SMC }) => {

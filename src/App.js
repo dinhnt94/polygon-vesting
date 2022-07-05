@@ -27,10 +27,17 @@ function App() {
               </Address>
             </Contract>
           </Route>
-          <Route exact path="/advisor">
-            <Contract type="advisor">
-              <Address type="advisor">
-                <Tool type="advisor" />
+          <Route exact path="/marketing">
+            <Contract type="marketing">
+              <Address type="marketing">
+                <Tool type="marketing" />
+              </Address>
+            </Contract>
+          </Route>
+          <Route exact path="/ecosystem">
+            <Contract type="ecosystem">
+              <Address type="ecosystem">
+                <Tool type="ecosystem" />
               </Address>
             </Contract>
           </Route>
