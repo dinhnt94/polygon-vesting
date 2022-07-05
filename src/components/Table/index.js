@@ -1,8 +1,10 @@
 import { Table, Tag, Space, Button, notification, Modal, Form, InputNumber, Col, Row, Select } from 'antd'
 import { useContract } from "../../hooks/contract";
 import { useAddress } from "../../hooks/address";
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ModalDetail from "./modal";
+import _ from 'lodash';
+
 const { Option } = Select;
 
 const Balance = ({ record }) => {
@@ -92,8 +94,8 @@ const Action = ({ record }) => {
 };
 
 const App = () => {
-  const { list } = useAddress();
-  const { addBeneficiary, reduceInitBalance, nerfUsers, setLoading } = useContract()
+  const { list, updateStatus } = useAddress();
+  const { addBeneficiary, reduceInitBalance, nerfUsers, setLoading, maxApprove, addBeneficiarys } = useContract()
   const [visible, showModal] = useState(false);
   const [filter, setFilter] = useState('all');
   const [recordUpdate, setRecordUpdate] = useState(null);
@@ -136,9 +138,17 @@ const App = () => {
       title: "Update",
       key: "update",
       dataIndex: "",
-      render: (text, record) =>  <Button type="primary" onClick={() => onUpdate(record)}>
-        Change
-      </Button>
+      render: (text, record) => {
+        if (record.status === 'completed') {
+          return (
+            <Button type="primary" onClick={() => onUpdate(record)}>
+              Change
+            </Button>
+          )
+        }
+
+        return null
+      }
     }
   ];
 
@@ -159,19 +169,19 @@ const App = () => {
   };
 
   const onSubmitChange = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const {address} = recordUpdate
-      const {amount_added, amount_reduce, percent_reduce} = form.getFieldsValue()
+      const {address} = recordUpdate;
+      const {amount_added, amount_reduce, percent_reduce} = form.getFieldsValue();
 
-      await addBeneficiary(address, amount_added)
-      await reduceInitBalance(address, amount_reduce)
-      await nerfUsers(address, percent_reduce)
+      if (Number(amount_added) > 0) await addBeneficiary(address, amount_added);
+      if (Number(amount_reduce) > 0) await reduceInitBalance(address, amount_reduce);
+      if (Number(percent_reduce) > 0) await nerfUsers(address, percent_reduce);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     } finally {
-      onClose()
-      setLoading(false)
+      onClose();
+      setLoading(false);
     }
   }
 
@@ -181,6 +191,51 @@ const App = () => {
     return item.status === filter
   })
 
+  const clickApproveAll = async () => {
+    if (filter === 'draft') {
+      setLoading(true)
+      try {
+        await maxApprove()
+        list
+          .filter((item) => {
+            return item.status === 'draft'
+          })
+          .map((item) => {
+            item.status = 'approve'
+            updateStatus(item)
+          })
+      } catch (e) {
+        console.log(e)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (filter === 'approve') {
+      setLoading(true)
+      try {
+        const data = [...list].filter((item) => {
+          return item.status === 'approve'
+        })
+
+        await addBeneficiarys(data)
+
+        list
+          .filter((item) => {
+            return item.status === 'approve'
+          })
+          .map((item) => {
+            item.status = 'completed'
+            updateStatus(item)
+          })
+      } catch (e) {
+        console.log(e)
+      } finally {
+        setLoading(false)
+      }
+    }
+  }
+
   return (
     <>
       <Row justify="space-between" style={{ marginTop: 5, marginBottom: 25}} >
@@ -188,10 +243,10 @@ const App = () => {
           <Select defaultValue="all" style={{ width: 120, marginRight: 20 }} onChange={onChangeFilter}>
             <Option value="all">All</Option>
             <Option value="draft">Draft</Option>
-            <Option value="approve">Waiting</Option>
+            <Option value="approve">Approve</Option>
           </Select>
 
-          <Button disabled={filter === 'all' || data.length === 0}>Approve All</Button>
+          <Button disabled={filter === 'all' || data.length === 0} onClick={clickApproveAll}>Approve All</Button>
         </Col>
       </Row>
 

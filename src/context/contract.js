@@ -2,6 +2,7 @@ import { createContext, useEffect, useRef, useState } from "react";
 import { getConfig } from "../utils/config";
 import { BoxLoading } from "react-loadingg";
 import Web3 from "web3";
+import _ from 'lodash';
 import { Result } from "antd";
 
 export const contextWeb3 = createContext("Default Value");
@@ -66,6 +67,22 @@ function Contract({ children, type }) {
       return false;
     }
   };
+
+  const maxApprove = async () => {
+    const BToken = constractBcoin.current
+    setLoading(true)
+    try {
+      await BToken.methods
+        .approve(PRIVATESALEBCOINVESTING.address, '115792089237316195423570985008687907853269984665640564039457584007913129639935')
+        .send({from: account.current})
+      setLoading(false)
+      return true
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      return false
+    }
+  }
 
   const confirm = async ({ address, amount }) => {
     const PToken = PrivateSaleCT.current;
@@ -139,16 +156,33 @@ function Contract({ children, type }) {
   };
 
   const addBeneficiary = async (address, amount) => {
-    return await PrivateSaleCT.current.methods.addBeneficiary(address, amount).send();
+    const price = (Number(amount) * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
+
+    return await PrivateSaleCT.current.methods.addBeneficiary(address, price).send();
   }
 
   const reduceInitBalance = async (address, reduceNum) => {
-    return await PrivateSaleCT.current.methods.addBeneficiary(address, reduceNum).send();
+    const price = (Number(reduceNum) * Math.pow(10, 18)).toLocaleString("fullwide", { useGrouping: false });
+
+    return await PrivateSaleCT.current.methods.reduceInitBalance(address, price).send();
   }
 
   const nerfUsers = async (address, percentage) => {
     return await PrivateSaleCT.current.methods.nerfUsers(address, percentage).send();
   }
+
+  const addBeneficiarys = async (items) => {
+    const addressList = _.map(items, (item) => item.address);
+    const amountList = _.map(items, (item) => Number(item.amount));
+    const total = _.sum(amountList)
+    const amountTotalConvert = (Number(total) * Math.pow(10, 18)).toLocaleString('fullwide', {useGrouping: false})
+    const amountListConvert = amountList.map((item) => {
+      return (Number(item) * Math.pow(10, 18)).toLocaleString('fullwide', {useGrouping: false})
+    })
+
+    return await PrivateSaleCT.current.methods.addBeneficiarys(addressList, amountListConvert, amountTotalConvert).send({ from: account.current });
+  }
+
 
   useEffect(() => {
     // connectBcoin();
@@ -160,6 +194,8 @@ function Contract({ children, type }) {
     dress_account: account.current,
     setLoading: setLoading,
     approve,
+    maxApprove,
+    addBeneficiarys,
     confirm,
     balanceOf,
     claimVestedToken,
