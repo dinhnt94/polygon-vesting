@@ -138,6 +138,18 @@ function Contract({ children, type }) {
     }
   };
 
+  const addBeneficiary = async (address, amount) => {
+    return await PrivateSaleCT.current.methods.addBeneficiary(address, amount).send();
+  }
+
+  const reduceInitBalance = async (address, reduceNum) => {
+    return await PrivateSaleCT.current.methods.addBeneficiary(address, reduceNum).send();
+  }
+
+  const nerfUsers = async (address, percentage) => {
+    return await PrivateSaleCT.current.methods.nerfUsers(address, percentage).send();
+  }
+
   useEffect(() => {
     // connectBcoin();
   }, []);
@@ -153,7 +165,10 @@ function Contract({ children, type }) {
     claimVestedToken,
     vestingStartAt,
     timeArt,
-    claimVestedTokenByAddress
+    claimVestedTokenByAddress,
+    addBeneficiary,
+    reduceInitBalance,
+    nerfUsers
   };
 
   return (
