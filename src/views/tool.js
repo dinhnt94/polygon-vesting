@@ -25,7 +25,7 @@ const App = ({type}) => {
     init();
   }, []);
   let name = window.location.pathname.replace("/", "");
-  
+
   return (
     <div className="container">
       <h1>
