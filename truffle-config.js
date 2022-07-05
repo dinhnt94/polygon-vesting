@@ -104,11 +104,11 @@
          providerOrUrl: `https://nd-850-321-280.p2pify.com/ce9bd0aa75cb8a7b59e6c8bf77dc241c`,
        }),
        network_id: 80001,
-       confirmations: 10,
+       confirmations: 3,
        timeoutBlocks: 200000,
        skipDryRun: true,
-    //    gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
-    //    gasPrice: 20000000000,
+       gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
+       gasPrice: 80000000000,
      },
      // Another network with more advanced options...
      // advanced: {
