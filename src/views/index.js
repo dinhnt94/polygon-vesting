@@ -81,9 +81,9 @@ const App = () => {
               <Fragment>
                 <p>Vested Balance: {balance + totalClaimed}</p>
                 <p>Month Claimed: {info.monthsClaimed}</p>
-                <p>Total Bcoin Claimed: {totalClaimed}</p>
-                <p>Next Claimable On: {nextDate}</p>
-                <p>Amount of BCOIN that can be claimed: {amount_can_be_claim}</p>
+                <p>Total BOMB Claimed: {totalClaimed}</p>
+                <p>Next Claimable On(MM/DD/YYYY): {nextDate}</p>
+                <p>Amount of BOMB that can be claimed: {amount_can_be_claim}</p>
                 <button onClick={onClick} disabled={!isClaim} className={"button-claim " + (!isClaim ? "disbaled" : "")}>
                   Claim
                 </button>
