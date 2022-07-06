@@ -7,13 +7,13 @@ import { doc, setDoc, getFirestore, collection, getDocs, query, where } from "fi
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyApX07OmMG577TqrqTiWWKzHjpwZfq_1D4",
-  authDomain: "epichero-95988.firebaseapp.com",
-  projectId: "epichero-95988",
-  storageBucket: "epichero-95988.appspot.com",
-  messagingSenderId: "1054401040670",
-  appId: "1:1054401040670:web:38669992d29b9da6f8b90f",
-  measurementId: "G-JW2YBKF5CL"
+  apiKey: "AIzaSyCK373TOKRb34raPmVdZp-_g8AkC76_rPQ",
+  authDomain: "test-vesting.firebaseapp.com",
+  projectId: "test-vesting",
+  storageBucket: "test-vesting.appspot.com",
+  messagingSenderId: "920193995873",
+  appId: "1:920193995873:web:49cefd2a9ea8868bdec620",
+  measurementId: "G-P13EELPCM6"
 };
 
 // Initialize Firebase
@@ -23,12 +23,13 @@ const db = getFirestore();
 export default app;
 
 const env = window.location.pathname.replace("/", "");
+console.log('env: ', env)
 const name_address = "address_" + (env === "" ? "private" : env);
 
 export async function getDocAddress() {
   const q = query(collection(db, name_address));
   const querySnapshot = await getDocs(q);
-  console.log(querySnapshot);
+  console.log('querySnapshot: ', querySnapshot);
   const reuslt = querySnapshot.docs.map((doc) => {
     return doc.data();
   });
@@ -38,6 +39,7 @@ export async function getDocAddress() {
 export async function addDocAddres(address) {
   if (!address) return;
   try {
+    console.log(db, name_address, address)
     const cityRef = doc(db, name_address, address.address);
     await setDoc(cityRef, address);
     console.log("Document written with ID: ", cityRef.id);

@@ -21,6 +21,7 @@ const UploadCom = () => {
       const result = CSVToArray(reader.result);
       setLoading(true);
       for await (const element of result) {
+        console.log('element: ', element)
         await addDocAddres(element);
       }
 
