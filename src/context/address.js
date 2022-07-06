@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { getDocAddress, addDocAddres } from "../utils/filrebase";
+import { getDocAddress, addDocAddres, removeRecord } from "../utils/filrebase";
+import _ from 'lodash'
 
 export const addressContext = createContext([]);
 
@@ -35,11 +36,23 @@ function Contract({ children }) {
     setList(temp);
   };
 
+  const removeRecordDocs = async (record) => {
+    await removeRecord(record)
+
+    const temp = [...list]
+    _.remove(temp, function (item) {
+      return item.address === record.address
+    })
+
+    setList(temp)
+  }
+
   const value = {
     list,
     fetchDocAddress,
     updateStatus,
-    addDoc
+    addDoc,
+    removeRecordDocs
   };
   return <addressContext.Provider value={value}>{children}</addressContext.Provider>;
 }

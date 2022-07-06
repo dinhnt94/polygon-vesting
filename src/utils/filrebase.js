@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { doc, setDoc, getFirestore, collection, getDocs, query, where } from "firebase/firestore";
+import { doc, setDoc, getFirestore, collection, getDocs, query, deleteDoc } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -48,5 +48,20 @@ export async function addDocAddres(address) {
     console.log("Document written with ID: ", cityRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
+  }
+}
+
+export async function removeRecord(record) {
+  const env = window.location.pathname.replace('/', '')
+  const name_address = 'address_' + (env === '' ? 'private' : env)
+
+  if (!record) return
+  try {
+    console.log(db, name_address, record)
+    const docRef = doc(db, name_address, record.address)
+    await deleteDoc(docRef)
+    console.log('Document removeRecord with ID: ', docRef.id)
+  } catch (e) {
+    console.error('Error adding document: ', e)
   }
 }

@@ -1,9 +1,8 @@
-import { Table, Tag, Space, Button, notification, Modal, Form, InputNumber, Col, Row, Select } from 'antd'
+import { Table, Tag, Space, Button, notification, Modal, Form, InputNumber, Col, Row, Select, Popconfirm } from 'antd'
 import { useContract } from "../../hooks/contract";
 import { useAddress } from "../../hooks/address";
 import { useState } from 'react'
 import ModalDetail from "./modal";
-import _ from 'lodash';
 
 const { Option } = Select;
 
@@ -94,7 +93,7 @@ const Action = ({ record }) => {
 };
 
 const App = () => {
-  const { list, updateStatus } = useAddress();
+  const { list, updateStatus, removeRecordDocs } = useAddress();
   const { addBeneficiary, reduceInitBalance, nerfUsers, setLoading, maxApprove, addBeneficiarys } = useContract()
   const [visible, showModal] = useState(false);
   const [filter, setFilter] = useState('all');
@@ -144,6 +143,32 @@ const App = () => {
             <Button type="primary" onClick={() => onUpdate(record)}>
               Change
             </Button>
+          )
+        }
+
+        return null
+      }
+    },
+    {
+      title: "Remove",
+      key: "remove",
+      dataIndex: "",
+      render: (text, record) => {
+        const confirm = () => {
+          return new Promise(async (resolve) => {
+            await removeRecordDocs(record)
+            resolve(null)
+          })
+        }
+
+        if (record.status !== 'completed') {
+          return (
+            <Popconfirm
+              title="Are you sure you want to delete this item?"
+              onConfirm={confirm}
+            >
+              <Button type="primary" danger>Remove</Button>
+            </Popconfirm>
           )
         }
 
