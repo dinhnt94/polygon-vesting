@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vestingAdmin
+  namespace: bsc-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vestingAdmin
+  template:
+    metadata:
+      labels:
+        app: vestingAdmin
+    spec:
+      serviceAccountName: ksa-sql-client
+      containers:
+      - image: asia-docker.pkg.dev/bombcrypto/api-test/vestingAdmin
+        name: vestingAdmin
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            ephemeral-storage: 10Mi
+            memory: 20Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vestingAdmin
+  namespace: bsc-test
+  annotations:
+    cloud.google.com/neg: '
+      {
+        "exposed_ports": {
+          "80": {}
+        }
+      }
+    '
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: vestingAdmin
+  type: LoadBalancer
