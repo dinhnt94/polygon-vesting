@@ -22,11 +22,11 @@ const db = getFirestore();
 
 export default app;
 
-const env = window.location.pathname.replace("/", "");
-console.log('env: ', env)
-const name_address = "address_" + (env === "" ? "private" : env);
-
 export async function getDocAddress() {
+  const env = window.location.pathname.replace("/", "");
+  const name_address = "address_" + (env === "" ? "private" : env);
+  console.log(name_address)
+
   const q = query(collection(db, name_address));
   const querySnapshot = await getDocs(q);
   console.log('querySnapshot: ', querySnapshot);
@@ -37,6 +37,9 @@ export async function getDocAddress() {
 }
 
 export async function addDocAddres(address) {
+  const env = window.location.pathname.replace("/", "");
+  const name_address = "address_" + (env === "" ? "private" : env);
+
   if (!address) return;
   try {
     console.log(db, name_address, address)
