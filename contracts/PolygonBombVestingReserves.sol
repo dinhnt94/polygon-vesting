@@ -1,17 +1,30 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
-import "./IERC20.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
+// import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 
-abstract contract BCoinVesting is Ownable, AccessControl {
-  using SafeMath for uint256;
+contract PolygonBCoinVestingReserves is Initializable, OwnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
+  using SafeMathUpgradeable for uint256;
+  using SafeERC20Upgradeable for IERC20Upgradeable;
+
+  // Event raised on each successful withdraw.
+  event Claim(address beneficiary, uint256 amount, uint256 timestamp);
+  // Event raised on each desposit
+  event Deposit(address beneficiary, uint256 initialBalance, uint256 timestamp);
+
+  bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
+  bytes32 public constant VESTING_ADMIN_ROLE = keccak256("VESTING_ADMIN_ROLE");
+  bytes32 public constant DESIGNER_ROLE = keccak256("DESIGNER_ROLE");
 
   // Address of BCOIN Token.
-  IERC20 public bcoinToken;
+  IERC20Upgradeable public bcoinToken;
 
   // Starting timestamp of vesting
   // Will be used as a starting point for all dates calculations.
@@ -33,39 +46,37 @@ abstract contract BCoinVesting is Ownable, AccessControl {
     uint256 magicPercent;
   }
 
-  // Create a new role identifier for the minter role
-  bytes32 public constant VESTING_ADMIN_ROLE = keccak256("VESTING_ADMIN_ROLE");
-
   // beneficiaries tracks all beneficiary and store data in storage
   mapping(address => Beneficiary) public beneficiaries;
 
-  // Event raised on each successful withdraw.
-  event Claim(address beneficiary, uint256 amount, uint256 timestamp);
-
-  // Event raised on each desposit
-  event Deposit(address beneficiary, uint256 initialBalance, uint256 timestamp);
 
   // @dev constructor creates the vesting contract
   // @param _token Address of BCOIN token
   // @param _owner Address of owner of this contract, a.k.a the CEO
   // @param _vestingStartAt the starting timestamp of vesting , in seconds.
   // @param _vestingDuration the duration since _vestingStartAt until the vesting ends, in months.
-  constructor(
+  function initialize(
     address _token,
-    address _owner,
     uint256 _vestingStartAt,
-    uint256 _vestingDuration
-  ) {
+    uint256 _vestingDuration) public initializer {
+    __Ownable_init();
+    __AccessControl_init();
+    __UUPSUpgradeable_init();
+
+    _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    _grantRole(UPGRADER_ROLE, msg.sender);
+    _grantRole(VESTING_ADMIN_ROLE, msg.sender);
+    _grantRole(DESIGNER_ROLE, msg.sender);
+
     require(_token != address(0), "zero-address");
-    require(_owner != address(0), "zero-address");
-    bcoinToken = IERC20(_token);
-    transferOwnership(_owner);
+    // require(_owner != address(0), "zero-address");
+    bcoinToken = IERC20Upgradeable(_token);
+    // transferOwnership(_owner);
     vestingStartAt = _vestingStartAt;
     vestingDuration = _vestingDuration;
-    // Grant the minter role to a specified account
-    _setupRole(VESTING_ADMIN_ROLE, _owner);
-    _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
   }
+
+  function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}
 
   // @dev addBeneficiary registers a beneficiary and deposit a
   // corresponded amount of token for this beneficiary
@@ -74,7 +85,7 @@ abstract contract BCoinVesting is Ownable, AccessControl {
   // (additionally desposit) the amount of token for this beneficiary
   // @param _beneficiary Address of the beneficiary
   // @param _amount Amount of token belongs to this beneficiary
-  function addBeneficiary(address _beneficiary, uint256 _amount) public onlyOwner() {
+  function addBeneficiary(address _beneficiary, uint256 _amount) public onlyRole(DESIGNER_ROLE) {
     //require(block.timestamp < vestingStartAt, "not-update-after-vesting-started");
     require(_beneficiary != address(0), "zero-address");
     // Based on ERC20 standard, to transfer funds to this contract,
@@ -90,7 +101,7 @@ abstract contract BCoinVesting is Ownable, AccessControl {
 
   // Do more adding
   // this func too much gas
-  function addWhitelists(address[] memory users, uint256[] memory amounts) public onlyOwner() {
+  function addWhitelists(address[] memory users, uint256[] memory amounts) public onlyRole(DESIGNER_ROLE) {
     require(users.length == amounts.length, "set-diff-len");
     for (uint i = 0; i < users.length; i++) {
       addBeneficiary(users[i], amounts[i]);
@@ -98,7 +109,7 @@ abstract contract BCoinVesting is Ownable, AccessControl {
   }
 
   //
-  function addBeneficiarys(address[] memory users, uint256[] memory amounts, uint _amountTotal) public onlyOwner() {
+  function addBeneficiarys(address[] memory users, uint256[] memory amounts, uint _amountTotal) public onlyRole(DESIGNER_ROLE) {
     require(users.length == amounts.length, "sets-diff-len");
     require(bcoinToken.transferFrom(_msgSender(), address(this), _amountTotal), "cannot-transfer");
     for (uint i = 0; i < users.length; i++) {
@@ -110,14 +121,14 @@ abstract contract BCoinVesting is Ownable, AccessControl {
   }
 
   // Owner can nerf user when user is blacklist
-  function nerfUsers(address user, uint percentage) public onlyOwner() {
+  function nerfUsers(address user, uint percentage) public onlyRole(DESIGNER_ROLE) {
     // update storage data
     Beneficiary storage bf = beneficiaries[user];
     bf.magicPercent = percentage;
   }
-  
+
   // Reduce balance user when wrong/inflate
-  function reduceInitBalance(address user, uint reduceNum) public onlyOwner() {
+  function reduceInitBalance(address user, uint reduceNum) public onlyRole(DESIGNER_ROLE) {
     // update storage data
     Beneficiary storage bf = beneficiaries[user];
     bf.initialBalance = bf.initialBalance.sub(reduceNum);
@@ -138,7 +149,7 @@ abstract contract BCoinVesting is Ownable, AccessControl {
     bf.monthsClaimed = bf.monthsClaimed.add(monthsVestable);
     bf.totalClaimed = bf.totalClaimed.add(tokenVestable);
 
-    // check magic
+    // nerf
     uint256 amount = tokenVestable.sub(tokenVestable.mul(bf.magicPercent).div(100));
     require(bcoinToken.transfer(_beneficiary, amount), "fail-to-transfer-token");
 
@@ -178,26 +189,25 @@ abstract contract BCoinVesting is Ownable, AccessControl {
   }
 
   // view function to check status of a beneficiary
-  function getBeneficiary(address _beneficiary)
-    public
-    view
+  function getBeneficiary(address _beneficiary) public view
     returns (
       uint256 initialBalance,
       uint256 monthsClaimed,
-      uint256 totalClaimed
+      uint256 totalClaimed,
+      uint256 magicPercent
     )
   {
     Beneficiary storage bf = beneficiaries[_beneficiary];
     require(bf.initialBalance > 0, "beneficiary-not-found");
 
-    return (bf.initialBalance, bf.monthsClaimed, bf.totalClaimed);
+    return (bf.initialBalance, bf.monthsClaimed, bf.totalClaimed, bf.magicPercent);
   }
 
   // update some var
-  function updateVestingStart(uint _vestingStartAt) external onlyOwner() {
+  function updateVestingStart(uint _vestingStartAt) external onlyRole(DESIGNER_ROLE) {
     vestingStartAt = _vestingStartAt;
   }
-  function updateVestingDuration(uint _vestingDuration) external onlyOwner() {
+  function updateVestingDuration(uint _vestingDuration) external onlyRole(DESIGNER_ROLE) {
     vestingDuration = _vestingDuration;
   }
 
