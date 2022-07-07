@@ -3,14 +3,11 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-
-// import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 
-contract PolygonBCoinVesting is Initializable, OwnableUpgradeable, AccessControlUpgradeable, UUPSUpgradeable {
+abstract contract PolygonBombVesting is Initializable, AccessControlUpgradeable, OwnableUpgradeable{
   using SafeMathUpgradeable for uint256;
   using SafeERC20Upgradeable for IERC20Upgradeable;
 
@@ -48,35 +45,6 @@ contract PolygonBCoinVesting is Initializable, OwnableUpgradeable, AccessControl
 
   // beneficiaries tracks all beneficiary and store data in storage
   mapping(address => Beneficiary) public beneficiaries;
-
-
-  // @dev constructor creates the vesting contract
-  // @param _token Address of BCOIN token
-  // @param _owner Address of owner of this contract, a.k.a the CEO
-  // @param _vestingStartAt the starting timestamp of vesting , in seconds.
-  // @param _vestingDuration the duration since _vestingStartAt until the vesting ends, in months.
-  function initialize(
-    address _token,
-    uint256 _vestingStartAt,
-    uint256 _vestingDuration) public initializer {
-    __Ownable_init();
-    __AccessControl_init();
-    __UUPSUpgradeable_init();
-
-    _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    _grantRole(UPGRADER_ROLE, msg.sender);
-    _grantRole(VESTING_ADMIN_ROLE, msg.sender);
-    _grantRole(DESIGNER_ROLE, msg.sender);
-
-    require(_token != address(0), "zero-address");
-    // require(_owner != address(0), "zero-address");
-    bcoinToken = IERC20Upgradeable(_token);
-    // transferOwnership(_owner);
-    vestingStartAt = _vestingStartAt;
-    vestingDuration = _vestingDuration;
-  }
-
-  function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}
 
   // @dev addBeneficiary registers a beneficiary and deposit a
   // corresponded amount of token for this beneficiary

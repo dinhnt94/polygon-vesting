@@ -1,11 +1,11 @@
 const { deployProxy, upgradeProxy, forceImport } = require('@openzeppelin/truffle-upgrades')
 
-const VestingPrivate = artifacts.require("PolygonBCoinVestingPrivate");
-const VestingDex = artifacts.require("PolygonBCoinVestingDex");
-const VestingEco = artifacts.require("PolygonBCoinVestingEcoSys");
-const VestingMarketing = artifacts.require("PolygonBCoinVestingMarketing");
-const VestingTeam = artifacts.require("PolygonBCoinVestingTeam");
-const VestingReserves = artifacts.require("PolygonBCoinVestingReserves");
+const VestingPrivate = artifacts.require("PolygonBombVestingPrivate");
+const VestingDex = artifacts.require("PolygonBombVestingDex");
+const VestingEco = artifacts.require("PolygonBombVestingEcoSys");
+const VestingMarketing = artifacts.require("PolygonBombVestingMarketing");
+const VestingTeam = artifacts.require("PolygonBombVestingTeam");
+const VestingReserves = artifacts.require("PolygonBombVestingReserves");
 
 module.exports = async function (deployer, network, accounts) {
     if (network === `polygon-testnet`) {
