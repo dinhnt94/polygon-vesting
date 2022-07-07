@@ -58,10 +58,10 @@ const App = () => {
   const current_time = parseInt(new Date().getTime() / 1000);
   const time = current_time - timeStart;
   const monthClaim = Math.floor(time / SECONDS_PER_MONTH);
-  const balance = (info.initialBalance - info.totalClaimed) / Math.pow(10, 18);
+  const balance = (Number(info.initialBalance)- Number(info.totalClaimed)) / Math.pow(10, 18);
   // const isClaim = monthClaim > parseInt(info.monthsClaimed) ? true : false;
   const isClaim = monthClaim > parseInt(info.monthsClaimed) &&
-    parseFloat(info.initialBalance / Math.pow(10, 18)) > 0;
+    parseFloat(Number(info.initialBalance) / Math.pow(10, 18)) > 0;
   const next = parseInt(Math.ceil(time / SECONDS_PER_MONTH) * SECONDS_PER_MONTH) + parseInt(timeStart);
   // const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
   const nextDate = moment.unix(next).format("LLLL");
@@ -71,7 +71,7 @@ const App = () => {
   console.log(next, nextDate);
   console.log("=========");
 
-  const totalClaimed = info.totalClaimed / Math.pow(10, 18);
+  const totalClaimed = Number(info.totalClaimed) / Math.pow(10, 18);
   const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
   const amount_can_be_claim = month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 20) : "0";
   return (

@@ -2,7 +2,7 @@ import { createContext, useEffect, useRef, useState } from "react";
 import { BCOINTOKEN, PRIVATESALEBCOINVESTING } from "../utils/config";
 import { BoxLoading } from "react-loadingg";
 import Web3 from "web3";
-import { Result } from "antd";
+import { changeNetwork } from '../services/web3'
 
 export const contextWeb3 = createContext("Default Value");
 
@@ -27,10 +27,15 @@ function Contract({ children }) {
   const connectBcoin = async () => {
     const connected = await enableEthereum();
     if (!connected) return;
- 
+
 
     const web3 = await new Web3(window.ethereum);
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    // Get chain ID
+    if (Number(window.ethereum.networkVersion) !== 137) {
+      await changeNetwork(137)
+    }
+
     const BToken = await new web3.eth.Contract(BCOINTOKEN.abi, BCOINTOKEN.address, { from: accounts[0] });
     PrivateSaleCT.current = await new web3.eth.Contract(PRIVATESALEBCOINVESTING.abi, PRIVATESALEBCOINVESTING.address, { from: accounts[0] });
     constractBcoin.current = BToken;
