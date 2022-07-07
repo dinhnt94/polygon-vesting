@@ -48,7 +48,7 @@ module.exports = async function (deployer, network, accounts) {
         const BCoinTokenAddress = "0xB2C63830D4478cB331142FAc075A39671a5541dC";
         const _vestingStartAt = 1657098000; // 9h 6/7/2022 utc (6 Jul)
 
-        const startPrivate = (_vestingStartAt - 2628000 + 24 * 3600 + 10 * 3600);
+        const startPrivate = (_vestingStartAt - 2628000 + 24 * 3600 - 10 * 3600);
         const VestingPrivateProxyAddress = "0xE5F75BE1798A8F5422ADcbDA950C1E2Aaa969f8B";
         // await deployProxy(VestingPrivate, [BCoinTokenAddress, startPrivate, 20], { deployer, kind: 'uups' });
         // await forceImport(VestingPrivateProxyAddress, BCoinIDO);
