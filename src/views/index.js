@@ -64,7 +64,7 @@ const App = () => {
     parseFloat(info.initialBalance / Math.pow(10, 18)) > 0;
   const next = parseInt(Math.ceil(time / SECONDS_PER_MONTH) * SECONDS_PER_MONTH) + parseInt(timeStart);
   // const nextDate = new Date(next * 1000).toLocaleString().split(",")[0];
-  const nextDate = moment.unix(next).format("hh:mm MM/DD/YYYY");
+  const nextDate = moment.unix(next).format("LLLL");
 
   console.log("monthClaim", monthClaim);
   console.log("=========");
@@ -73,7 +73,7 @@ const App = () => {
 
   const totalClaimed = info.totalClaimed / Math.pow(10, 18);
   const month_not_claim = monthClaim - parseInt(info.monthsClaimed);
-  const amount_can_be_claim = month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 10) : "0";
+  const amount_can_be_claim = month_not_claim > 0 ? month_not_claim * ((balance + totalClaimed) / 20) : "0";
   return (
     <div className="container-claim" style={{ background: "url(/picture.jpg)", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
       <div className="wrap-claim">
@@ -84,7 +84,7 @@ const App = () => {
                 <p>Vested Balance: {balance + totalClaimed}</p>
                 <p>Month Claimed: {info.monthsClaimed}</p>
                 <p>Total BOMB Claimed: {totalClaimed}</p>
-                <p>Next Claimable On(MM/DD/YYYY): {nextDate}</p>
+                <p>Next Claimable On:   {nextDate}</p>
                 <p>Amount of BOMB that can be claimed: {amount_can_be_claim}</p>
                 <button onClick={onClick} disabled={!isClaim} className={"button-claim " + (!isClaim ? "disbaled" : "")}>
                   Claim
