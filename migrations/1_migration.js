@@ -6,6 +6,8 @@ const VestingEco = artifacts.require("PolygonBombVestingEcoSys");
 const VestingMarketing = artifacts.require("PolygonBombVestingMarketing");
 const VestingTeam = artifacts.require("PolygonBombVestingTeam");
 const VestingReserves = artifacts.require("PolygonBombVestingReserves");
+const VestingPack2 = artifacts.require("PolygonBombVestingPackage2");
+const VestingStake = artifacts.require("PolygonBombVestingStake");
 
 module.exports = async function (deployer, network, accounts) {
     if (network === `polygon-testnet`) {
@@ -78,6 +80,17 @@ module.exports = async function (deployer, network, accounts) {
         const VestingReservesProxyAddress = "0xCDF804777ad2d7b397601C8DC77c23c843786bAF";
         // await deployProxy(VestingReserves, [BCoinTokenAddress, startReserves, 1], { deployer, kind: 'uups' });
         // await upgradeProxy(VestingReservesProxyAddress, VestingReserves, { deployer, kind: 'uups', unsafeAllowRenames: true, unsafeAllow: ['state-variable-immutable'] });
+
+        const startPack2 = 1680307200;  // 1/4/2023
+        const VestingPack2ProxyAddress = "0x4FD4a6905eF6b0084af1e4912bB81ED41A1bDa21";
+        // await deployProxy(VestingPack2, [BCoinTokenAddress, startPack2, 1], { deployer, kind: 'uups' });
+        // await upgradeProxy(VestingPack2ProxyAddress, VestingPack2, { deployer, kind: 'uups', unsafeAllowRenames: true, unsafeAllow: ['state-variable-immutable'] });
+
+
+        const startStake = 1672531200;  // 1/1/2023
+        const VestingStakeProxyAddress = "0x193109Df376B63D7c8907F94dfe92e8D49d72FCD";
+        await deployProxy(VestingStake, [BCoinTokenAddress, startStake, 1], { deployer, kind: 'uups' });
+        // await upgradeProxy(VestingStakeProxyAddress, VestingStake, { deployer, kind: 'uups', unsafeAllowRenames: true, unsafeAllow: ['state-variable-immutable'] });
 
     }
 }
